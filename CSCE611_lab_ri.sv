@@ -30,7 +30,7 @@ module CSCE611_lab_ri(
 	output		     [6:0]		HEX6,
 	output		     [6:0]		HEX7
 );
-
+// use this file for over all functionallity of the project, top.sv is just an example
 
 
 //=======================================================

@@ -31,19 +31,33 @@ module CSCE611_lab_ri(
 	output		     [6:0]		HEX7
 );
 // use this file for over all functionallity of the project, top.sv is just an example
-
-
+// TODO : Read SW into gpio_in
 //=======================================================
 //  REG/WIRE declarations
 //=======================================================
+	// Input from switch
+	reg [31:0] GPIO_in,
+	// Output
+	reg [31:0] GPIO_out;
 
-
+	logic [55:0] segs;
+	/* 8 displays of 7 bits, 8*7=56
+	   make for loop to assign all hex displays instead of typing 8 hexdriver instantiations
+	*/
 
 
 //=======================================================
 //  Structural coding
 //=======================================================
+	cpu cpu(.clk(CLOCK_50), .rst(~KEY[0]), .GPIO_in(GPIO_in), .GPIO_out(GPIO_out));
 
+	assign {HEX7,HEX6,HEX5,HEX4,HEX3,HEX2,HEX1,HEX0} = segs;
+	genvar i;
+	generate
+	for (i=0;i<8;i=i+1) begin : decoders
+		hexdriver mydecoder(.val(GPIO_out[i*4+3:i*4]),.HEX(segs[i*7+6:i*7]));
+	end
+	endgenerate
 
 
 endmodule

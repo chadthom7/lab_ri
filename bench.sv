@@ -1,23 +1,22 @@
 module bench;
 //____________________________________________________________
-
+	// Clk and rst are normal input, clk2 is used to download vector and check results 
 	reg clk, clk2, rst;
-	reg [1:0 ] mode;	/* mode from SW17 and SW16 */ ///  mode = switch
-	reg [3:0 ] key;		/* value from KEYs */
-	reg [15:0] val;		/* 16 bit value from SW15...SW0 */
-	reg [15:0] top;		/* 16 bit value at the top of the
-					 * stack, to be shown on HEX3...HEX0 */
-	reg [15:0] next;		/* 16 bit value second-to-top in the
-					 * stack, to be shown on HEX7...HEX4 */
-	reg [7:0] counter;		/* counter value to show on LEDG */
 //_____________________________________________________________
 	// TESTBENCH DATA
 	logic [61:0] vectors [149:0]; // 150 62 bit test vectors
 	logic [31:0] error, vectornum; // error counter
-	// EXPECTED INPUT
-	reg [15:0] top_expected;
-	reg [15:0] next_expected;
-	reg [7:0] counter_expected;
+//_____________________________________________________________
+	// Input from switch
+	reg [31:0] GPIO_in,
+	// Output
+	reg [31:0] GPIO_out;
+	// EXPECTED Output
+	reg [31:0] GPIO_out_e;
+	// vectors:
+	// rst  GPIO_in  GPIO_out  GPIO_out_e
+//_____________________________________________________________
+
 
 	initial begin
 		//key   = 4'b1111; // making sure keys start out as unpressed (being pressed is active low)
@@ -25,7 +24,7 @@ module bench;
 	end
 	/* instantiate the ALU we plan to test */
 	rpncalc rpncalc(.clk(clk), .rst(rst), .mode(mode), .key(key), .val(val), .top(top), .next(next), .counter(counter));
-
+	cpu cpu(.clk(clk), .rst(rst), .GPIO_in(GPIO_in), .GPIO_out(GPIO_out));
 	// RPNCALC CLOCK
 	always begin
 		clk = 1'b1; #5; clk = 1'b0; #5;

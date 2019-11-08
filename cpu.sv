@@ -47,19 +47,15 @@ module cpu(input clk,
 	logic [1:0] pc_src_EX;
 	logic stall_FETCH,stall_EX;
 
-	// GPIO control
+	// GPIO control 
 	logic GPIO_out_en;
-
 	always_ff @(posedge clk,posedge rst) begin
 		if (rst) GPIO_out <= 32'b0; else
 			if (GPIO_out_en) GPIO_out <= readdata2_EX;
 	end
 
-	always_ff @(posedge clk,posedge rst) begin
-		if (rst) stall_EX <= 1'b0; else stall_EX <= stall_FETCH;
-	end
 
-	// FETCH stage
+	// FETCH stage----------------------------------------------------------------------------------
 	always_ff @(posedge clk,posedge rst) begin
 		if (rst) begin
 			PC_FETCH <= 12'b0;
@@ -70,7 +66,7 @@ module cpu(input clk,
 		end
 	end
 	
-	// pipeline registers
+	// pipeline registers or Writeback stage-----------------------------------------------------------------------------
 	always_ff @(posedge clk,posedge rst) begin
 		if (rst) begin
 			regwrite_WB <= 1'b0;
@@ -104,7 +100,7 @@ module cpu(input clk,
 		   .hi(hi_EX),
 		   .zero(zero_EX));
 
-	// control unit
+	// control unit AKA execute Stage-----------------------------------------------------------------------------
 	always_comb begin
 		op_EX = 4'b0100;		 // add
 		regwrite_EX = 1'b0;		 // don't write a register

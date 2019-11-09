@@ -37,12 +37,12 @@ output GPIO_OUT
 		
 		// For Jump and Branch Instructions (I-Type)
 		// pc_src_EX = 2'b0;
-		// stall_FETCH = 1'b0;
 		// alu_src_EX = 2'b0;
 		// rdrt_EX = 1'b0;
-		
+		// stall_FETCH = 1'b0;
 
-		// if (~stall_FETCH) begin
+
+		// if (~stall_FETCH) begin // -> Was before I-Type instructions 
 
 			// ADD
 			if (i_type == 6'b0 && function_code == 6'b100000 |
@@ -52,6 +52,7 @@ output GPIO_OUT
 				regsel_EX = 2'b00;       
 				enhilo_EX = 1'b0;
 				regwrite_EX = 1'b1;
+				//rdrt_EX = 1'b0;
 			
 			// SUB
 			end else if (i_type == 6'b0 && function_code == 6'b100010 |
@@ -61,6 +62,7 @@ output GPIO_OUT
 				enhilo_EX = 1'b0;
 				regsel_EX = 2'b00;
 				regwrite_EX = 1'b1;
+				//rdrt_EX = 1'b0;
 
 			// MULT (signed)
 			end else if (function_code == 6'b011000) begin
@@ -69,6 +71,7 @@ output GPIO_OUT
 				enhilo_EX = 1'b1;
 				regsel_EX = 2'b00;
 				regwrite_EX = 1'b0;
+				//rdrt_EX = 1'b0;
 
 			// MULTU (unsigned)
 			end else if (function_code == 6'b011001) begin
@@ -77,6 +80,7 @@ output GPIO_OUT
 				enhilo_EX = 1'b1;
 				regsel_EX = 2'b00;
 				regwrite_EX = 1'b0;
+				//rdrt_EX = 1'b0;
 				
 			// AND 
 			end else if (function_code == 6'b100100) begin 
@@ -85,6 +89,7 @@ output GPIO_OUT
 				enhilo_EX = 1'b0;
 				regsel_EX = 2'b00;
 				regwrite_EX = 1'b1;
+				//rdrt_EX = 1'b0;
 
 			// OR 
 			end else if (function_code == 6'b100101) begin 
@@ -93,6 +98,7 @@ output GPIO_OUT
 				enhilo_EX = 1'b0;
 				regsel_EX = 2'b00;
 				regwrite_EX = 1'b1;
+				//rdrt_EX = 1'b0;
 
 			// NOR
 			end else if (function_code == 6'b100111) begin 
@@ -101,6 +107,7 @@ output GPIO_OUT
 				enhilo_EX = 1'b0;
 				regsel_EX = 2'b00;
 				regwrite_EX = 1'b1;
+				//rdrt_EX = 1'b0;
 
 			// XOR
 			end else if (function_code == 6'b100110) begin 
@@ -109,15 +116,67 @@ output GPIO_OUT
 				enhilo_EX = 1'b0;
 				regsel_EX = 2'b00;
 				regwrite_EX = 1'b1;	
+				//rdrt_EX = 1'b0;
 
 			// SLL
 			end else if (function_code == 6'b000000) begin 
-				alu_op = 4'b;
+				alu_op = 4'b1000;
 				shamt_EX = shamt;
 				enhilo_EX = 1'b0;
 				regsel_EX = 2'b00;
 				regwrite_EX = 1'b1;	
+				//rdrt_EX = 1'b0;
 
+			// SRL
+			end else if (function_code == 6'b000010) begin 
+				alu_op = 4'b1001;
+				shamt_EX = shamt;
+				enhilo_EX = 1'b0;
+				regsel_EX = 2'b00;
+				regwrite_EX = 1'b1;
+				//rdrt_EX = 1'b0;
+
+			// SRA
+			end else if (function_code == 6'b000011) begin 
+				alu_op = 4'b1010;
+				shamt_EX = shamt;
+				enhilo_EX = 1'b0;
+				regsel_EX = 2'b00;
+				regwrite_EX = 1'b1;	
+				//rdrt_EX = 1'b0;
+
+
+			// MFHI 
+			end else if (function_code == 6'b010000) begin 
+				alu_op = 4'b1000;
+				shamt_EX = 5'bX;
+				enhilo_EX = 1'b0;
+				regsel_EX = 2'b00;
+				regwrite_EX = 1'b1;
+				//rdrt_EX = 1'b0;
+
+			// MFLO
+			end else if (function_code == 6'b010010) begin 
+				alu_op = 4'b1000;
+				shamt_EX = 5'bX;
+				enhilo_EX = 1'b0;
+				regsel_EX = 2'b00;
+				regwrite_EX = 1'b1;	
+				//rdrt_EX = 1'b0;
+
+			// NOP
+			end else if (function_code == 6'b000000) begin 
+				alu_op = 4'bXXXX;
+				shamt_EX = 5'bX;
+				enhilo_EX = 1'b0;
+				regsel_EX = 2'b00;
+				regwrite_EX = 1'b0;	
+				//rdrt_EX = 1'b0;
+
+				
+			
+
+			// TODO // -> SLT & SLTU
 
 
 	//------------------------- I-TYPE -------------------------//

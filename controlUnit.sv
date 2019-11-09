@@ -230,9 +230,9 @@ output GPIO_IN
 				
 			// ori
 			end else if (i_type == 6'b001101) begin
+				alu_op = 4'b0001;
 				regwrite_EX = 1'b1;
 				alu_src_EX = 2'b10;
-				alu_operation = 4'b0001;
 				rdrt_EX = 1'b1;
 				
 			// bne

@@ -27,7 +27,7 @@ output GPIO_OUT
 
 // Control Unit Logic
 	always_comb begin
-		// alu_op = 4'b0000;
+		// alu_op = 4'b0000; // '0000' is op code for AND
 		// regsel_EX = 2'b00;
 		// regwrite_EX = 1'b0;			   // don't write a register
 		// shamt_EX = instruction_EX[10:6]; // For sll, srl, sra, 'X' for everything else
@@ -63,7 +63,7 @@ output GPIO_OUT
 				regwrite_EX = 1'b1;
 
 			// MULT (signed)
-			end else if(function_code == 6'b011000) begin
+			end else if (function_code == 6'b011000) begin
 				alu_op = 4'b0110;
 				shamt = 5'bX;
 				enhilo_EX = 1'b1;
@@ -78,7 +78,15 @@ output GPIO_OUT
 				regsel_EX = 2'b00;
 				regwrite_EX = 1'b0;
 				
-	
+			// AND 
+			end else if (function_code == 6'b100100) begin 
+				alu_op = 4'b0000;
+				shamt = 5'bX;
+				enhilo_EX = 1'b0;
+				regsel_EX = 2'b00;
+				regwrite_EX = 1'b1;
+
+
 	//------------------------- I-TYPE -------------------------//
 
 

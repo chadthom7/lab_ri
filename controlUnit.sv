@@ -21,16 +21,11 @@ output GPIO_OUT
 
 );
 
-
-
-
 // enhilo_EX // Assert for mult / multu instructions
 
 // regsel_EX // 1 for mfhi, 2 for mflo, 0 for everything else
 
-
-
-// control unit logic
+// Control Unit Logic
 	always_comb begin
 		// alu_op = 4'b0000;
 		// regsel_EX = 2'b00;
@@ -83,6 +78,10 @@ output GPIO_OUT
 				regsel_EX = 2'b00;
 				regwrite_EX = 1'b0;
 				
+	
+	//------------------------- I-TYPE -------------------------//
+
+
 			// addi, addiu
 			end else if (i_type == 6'b001000 || i_type == 6'b001001) begin
 				regwrite_EX = 1'b1;

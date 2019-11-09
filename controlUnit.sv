@@ -86,6 +86,31 @@ output GPIO_OUT
 				regsel_EX = 2'b00;
 				regwrite_EX = 1'b1;
 
+			// OR 
+			end else if (function_code == 6'b100101) begin 
+				alu_op = 4'b0001;
+				shamt = 5'bX;
+				enhilo_EX = 1'b0;
+				regsel_EX = 2'b00;
+				regwrite_EX = 1'b1;
+
+			// NOR
+			end else if (function_code == 6'b100111) begin 
+				alu_op = 4'b0010;
+				shamt = 5'bX;
+				enhilo_EX = 1'b0;
+				regsel_EX = 2'b00;
+				regwrite_EX = 1'b1;
+
+			// XOR
+			end else if (function_code == 6'b100110) begin 
+				alu_op = 4'b0011;
+				shamt = 5'bX;
+				enhilo_EX = 1'b0;
+				regsel_EX = 2'b00;
+				regwrite_EX = 1'b1;	
+
+
 
 	//------------------------- I-TYPE -------------------------//
 
@@ -100,7 +125,7 @@ output GPIO_OUT
 			end else if (i_type == 6'b001111) begin
 				regwrite_EX = 1'b1;
 				alu_src_EX = 2'b1;
-				shamt_EX = 5'd16;
+				shamt_EX = 5'd16; // ?? -> what should this be
 				alu_operation = 4'b1000; // sll
 				rdrt_EX = 1'b1;
 				

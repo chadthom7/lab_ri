@@ -43,15 +43,6 @@ module cpu (
 	logic [1:0] alu_src_EX;
 	logic rdrt_EX;
 
-
-	// Load MIPS program // TODO // Create actual .dat file for MIPS code //--------------------------------------//
-	initial begin
-		$readmemh("counter.dat", instruction_memory); 
-	end
-
-	// ALU mux
-	assign B_EX = alu_src_EX == 2'b0 ? readdata2_EX : alu_src_EX == 2'b1 ? {{16{instruction_EX[15]}},instruction_EX[15:0]} : {16'b0,instruction_EX[15:0]};
-
 	// PC control for Jump and Branch Instructions
 	logic [1:0] pc_src_EX;
 	logic stall_FETCH,stall_EX;
@@ -63,6 +54,16 @@ module cpu (
 	// Control Unit signal 
 	logic [1:0] regsel_EX;
 	
+
+		// Load MIPS program // TODO // Create actual .dat file for MIPS code //--------------------------------------//
+	initial begin
+		$readmemh("counter.dat", instruction_memory); 
+	end
+
+	// ALU mux
+	assign B_EX = alu_src_EX == 2'b0 ? readdata2_EX : alu_src_EX == 2'b1 ? {{16{instruction_EX[15]}},instruction_EX[15:0]} : {16'b0,instruction_EX[15:0]};
+
+
 	
 	always_ff @(posedge clk, posedge rst) begin
 		if (rst) gpio_out <= 32'b0; else
@@ -92,12 +93,15 @@ module cpu (
 	// Pipeline Registers or Writeback Stage-----------------------------------------------------------------------------
 	always_ff @(posedge clk,posedge rst) begin
 
+		// Develop this logic for the mux
+
 		if (rst) begin
 			regwrite_WB <= 1'b0;
 		end else begin
+			// if(regsel_EX) // -> Finish logic for regsel_EX to regsel_WB 
 			regwrite_WB <= regwrite_EX;
 			writeaddr_WB <= rdrt_EX == 1'b0 ? instruction_EX[15:11] : instruction_EX[20:16];
-			lo_WB <= lo_EX;
+			lo_WB <= lo_EX; // -> Finsih logic for regsel_EX to regsel_WB
 		end
 	end
 	

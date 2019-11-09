@@ -48,10 +48,18 @@ output GPIO_OUT
 
 		if (~stall_FETCH) begin
 
-			// add
-			if (i_type == 6'b0 && function_code == 6'b100000) begin
+			// ADD
+			if (i_type == 6'b0 && function_code == 6'b100000 || 
+				function_code == 6'b100001) begin
 				regwrite_EX = 1'b1;
-				alu_operation = 4'b0100;
+				alu_operation = 4'b0100; // op_EX
+				regsel_EX = 2'b00;       
+				enhilo_EX = 1'b0;
+				regwrite_EX = 1'b1;
+
+			// SUB
+
+
 				
 			// addi, addiu
 			end else if (i_type == 6'b001000 || i_type == 6'b001001) begin

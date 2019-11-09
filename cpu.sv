@@ -89,7 +89,7 @@ module cpu (
 		end
 	end
 	
-	// pipeline registers or Writeback stage-----------------------------------------------------------------------------
+	// Pipeline Registers or Writeback Stage-----------------------------------------------------------------------------
 	always_ff @(posedge clk,posedge rst) begin
 
 		if (rst) begin

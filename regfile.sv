@@ -35,9 +35,8 @@ module regfile (
 	// Implement Write Bypass for readdata 1 and 2, this is asynchronous as it requires no clock timing 
 	assign readdata1 = readaddr1 == writeaddr && we ? writedata : mem[readaddr1];
 	
-	//assign readdata2 = readaddr2 == writeaddr && we ? writedata : mem[readaddr2];
-	assign readdata2 = mem[readaddr2];
-	//condition ? if true : if false
+	assign readdata2 = readaddr2 == writeaddr && we ? writedata : mem[readaddr2];
+	
 endmodule
 
 

@@ -42,13 +42,13 @@ output GPIO_OUT
 		// rdrt_EX = 1'b0;
 		
 
-		if (~stall_FETCH) begin
+		// if (~stall_FETCH) begin
 
 			// ADD
 			if (i_type == 6'b0 && function_code == 6'b100000 |
 				function_code == 6'b100001) begin
 				alu_op = 4'b0100; // op_EX
-				shamt = 5'bX;
+				shamt_EX = 5'bX;
 				regsel_EX = 2'b00;       
 				enhilo_EX = 1'b0;
 				regwrite_EX = 1'b1;
@@ -57,7 +57,7 @@ output GPIO_OUT
 			end else if (i_type == 6'b0 && function_code == 6'b100010 |
 				function_code == 6'b100011) begin
 				alu_op = 4'b0101;
-				shamt = 5'bX;
+				shamt_EX = 5'bX;
 				enhilo_EX = 1'b0;
 				regsel_EX = 2'b00;
 				regwrite_EX = 1'b1;
@@ -65,7 +65,7 @@ output GPIO_OUT
 			// MULT (signed)
 			end else if (function_code == 6'b011000) begin
 				alu_op = 4'b0110;
-				shamt = 5'bX;
+				shamt_EX = 5'bX;
 				enhilo_EX = 1'b1;
 				regsel_EX = 2'b00;
 				regwrite_EX = 1'b0;
@@ -73,7 +73,7 @@ output GPIO_OUT
 			// MULTU (unsigned)
 			end else if (function_code == 6'b011001) begin
 				alu_op = 4'b0111;
-				shamt = 5'bX;
+				shamt_EX = 5'bX;
 				enhilo_EX = 1'b1;
 				regsel_EX = 2'b00;
 				regwrite_EX = 1'b0;
@@ -81,7 +81,7 @@ output GPIO_OUT
 			// AND 
 			end else if (function_code == 6'b100100) begin 
 				alu_op = 4'b0000;
-				shamt = 5'bX;
+				shamt_EX = 5'bX;
 				enhilo_EX = 1'b0;
 				regsel_EX = 2'b00;
 				regwrite_EX = 1'b1;
@@ -89,7 +89,7 @@ output GPIO_OUT
 			// OR 
 			end else if (function_code == 6'b100101) begin 
 				alu_op = 4'b0001;
-				shamt = 5'bX;
+				shamt_EX = 5'bX;
 				enhilo_EX = 1'b0;
 				regsel_EX = 2'b00;
 				regwrite_EX = 1'b1;
@@ -97,7 +97,7 @@ output GPIO_OUT
 			// NOR
 			end else if (function_code == 6'b100111) begin 
 				alu_op = 4'b0010;
-				shamt = 5'bX;
+				shamt_EX = 5'bX;
 				enhilo_EX = 1'b0;
 				regsel_EX = 2'b00;
 				regwrite_EX = 1'b1;
@@ -105,7 +105,15 @@ output GPIO_OUT
 			// XOR
 			end else if (function_code == 6'b100110) begin 
 				alu_op = 4'b0011;
-				shamt = 5'bX;
+				shamt_EX = 5'bX;
+				enhilo_EX = 1'b0;
+				regsel_EX = 2'b00;
+				regwrite_EX = 1'b1;	
+
+			// SLL
+			end else if (function_code == 6'b000000) begin 
+				alu_op = 4'b;
+				shamt_EX = shamt;
 				enhilo_EX = 1'b0;
 				regsel_EX = 2'b00;
 				regwrite_EX = 1'b1;	

@@ -133,7 +133,9 @@ module cpu (
 
 	//Execute Stage----------------------------------------------------------------------------------	
 	// Control Unit (Decode Instructions) 	
-	controlUnit CU (.shamt(instruction_EX[10:6]), 
+	controlUnit CU (.clk(clk),
+					.rst(rst),
+					.shamt(instruction_EX[10:6]), 
 					.function_code(instruction_EX[5:0]),
 					.i_type(instruction_EX[31:26]),
 					.alu_operation(op_EX),

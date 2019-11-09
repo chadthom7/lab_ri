@@ -6,7 +6,7 @@ input [5:0] i_type;
 
 input [4:0] shamt /* <-instruction_EX[10:6] */ , function_code /* <-instruction_EX[5:0] */ , 
 
-output [3:0] alu_operation, // op_EX
+output [3:0] alu_op, // op_EX
 
 output [4:0] shamt_EX, // shamt_EX[4:0] 
 
@@ -49,15 +49,28 @@ output GPIO_OUT
 		if (~stall_FETCH) begin
 
 			// ADD
-			if (i_type == 6'b0 && function_code == 6'b100000 || 
+			if (i_type == 6'b0 && function_code == 6'b100000 |
 				function_code == 6'b100001) begin
-				regwrite_EX = 1'b1;
-				alu_operation = 4'b0100; // op_EX
+				alu_op = 4'b0100; // op_EX
 				regsel_EX = 2'b00;       
 				enhilo_EX = 1'b0;
 				regwrite_EX = 1'b1;
-
+				shamt = 5'bX;
+			
 			// SUB
+			end else if (i_type == 6'b0 && function_code == 6'b100010 |
+				function_code == 6'b100011) begin
+				alu_op = 4'b0101;
+				shamt = 5'bX;
+				enhilo_EX = 1'b0;
+				regsel_EX = 2'b00;
+				regwrite_EX = 1'b1;
+
+			// MULT (not multu)
+			end else if(function_code == 6'b0110000) begin
+				alu_op = 4'b0110;
+
+
 
 
 				

@@ -50,6 +50,7 @@ module cpu (
 
 	// GPIO control from Control Unit
 	logic GPIO_out_en;
+	logic GPIO_in_en;
 	
 	// Control Unit signal 
 	logic [1:0] regsel_EX;
@@ -98,10 +99,10 @@ module cpu (
 		if (rst) begin
 			regwrite_WB <= 1'b0;
 		end else begin
-			// if(regsel_EX) // -> Finish logic for regsel_EX to regsel_WB 
+			// if(regsel_EX) // -> Finish logic for regsel_EX to regsel_WB, maybe?
 			regwrite_WB <= regwrite_EX;
 			writeaddr_WB <= rdrt_EX == 1'b0 ? instruction_EX[15:11] : instruction_EX[20:16];
-			lo_WB <= lo_EX; // -> Finsih logic for regsel_EX to regsel_WB
+			lo_WB <= GPIO_in_en == 1'b0 ? lo_EX : gpio_in; 
 		end
 	end
 	
@@ -143,7 +144,8 @@ module cpu (
 					.enhilo_EX(enhilo_EX),
 					.regsel_EX(regsel_EX),
 					.regwrite_EX(regwrite_EX)
-					.GPIO_OUT(GPIO_out_en));
+					.GPIO_OUT(GPIO_out_en),
+					.GPIO_IN(GPIO_in_en));
 
 		
 

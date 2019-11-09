@@ -32,19 +32,18 @@ output GPIO_OUT
 
 // control unit logic
 	always_comb begin
-		//op_EX = 4'b0100;				// ADD
-		//regwrite_EX = 1'b0;			// don't write a register
-		//shamt_EX = instruction_EX[10:6]; // default shamt
-		//alu_src_EX = 2'b0;
-		//rdrt_EX = 1'b0;
+		//alu_op = 4'b0000;
+		//regwrite_EX = 1'b0;			   // don't write a register
+		//shamt_EX = instruction_EX[10:6]; // For sll, srl, sra, 'X' for everything else
 		
 		//GPIO_out_en = 1'b0;
 		
 		// For Jump and Branch Instructions
 		//pc_src_EX = 2'b0;
 		//stall_FETCH = 1'b0;
+		//alu_src_EX = 2'b0;
+		//rdrt_EX = 1'b0;
 		
-		// Testing file merge to github
 
 		if (~stall_FETCH) begin
 
@@ -69,9 +68,10 @@ output GPIO_OUT
 			// MULT (not multu)
 			end else if(function_code == 6'b0110000) begin
 				alu_op = 4'b0110;
-
-
-
+				shamt = 5'bX;
+				enhilo_EX = 1'b1;
+				regsel_EX = 2'b00;
+				regwrite_EX = 1'b0;
 
 				
 			// addi, addiu

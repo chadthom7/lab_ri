@@ -62,9 +62,6 @@ module bench;
 
 	always @(posedge clk2) begin
 		{rst, GPIO_in, GPIO_out_e} = vectors[vectornum]; 
-		//vector doesn't need clk, rst
-		// size should be [1:0 ]+[3:0 ] +[15:0]+[15:0]+[15:0]+[7:0]
-		// 2+ 4+ 16*3 + 8 =>  14 + 16*3 => 14 + 48 = 62 bits
 		vectornum = vectornum + 1;
 	end	
 
@@ -79,8 +76,7 @@ module bench;
 			$display("  GPIO_out = %h", GPIO_out);
 			$display("GPIO_out_e = %h", GPIO_out_e);	
 			$display("");	
-			error = error + 32'b1;
-			
+			error = error + 32'b1;	
 		end else begin
 			$display("----------------------Passed-----------------------------------");	
 			$display("rst = %h GPIO_in = %h GPIO_out = %h GPIO_out_e = %h",rst, GPIO_in, GPIO_out, GPIO_out_e);

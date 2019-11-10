@@ -44,8 +44,6 @@ module CSCE611_lab_ri(
 	/* 8 displays of 7 bits, 8*7=56
 	   make for loop to assign all hex displays instead of typing 8 hexdriver instantiations
 	*/
-
-
 //=======================================================
 //  Structural coding
 //=======================================================

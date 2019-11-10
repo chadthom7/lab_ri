@@ -139,11 +139,11 @@ module cpu (
 					.shamt(instruction_EX[10:6]), 
 					.function_code(instruction_EX[5:0]),
 					.i_type(instruction_EX[31:26]),
-					.alu_operation(op_EX),
+					.alu_op(op_EX),
 					.shamt_EX(shamt_EX),
 					.enhilo_EX(enhilo_EX),
 					.regsel_EX(regsel_EX),
-					.regwrite_EX(regwrite_EX)
+					.regwrite_EX(regwrite_EX),.rdrt_EX(rdrt_EX),
 					.GPIO_OUT(GPIO_out_en),
 					.GPIO_IN(GPIO_in_en));
 

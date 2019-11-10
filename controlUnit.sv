@@ -2,7 +2,7 @@ module controlUnit (
 
 input clk, rst,
 
-input [5:0] i_type;
+input [5:0] i_type,
 
 input [4:0] shamt /* <-instruction_EX[10:6] */ , function_code /* <-instruction_EX[5:0] */ , 
 
@@ -145,7 +145,7 @@ output GPIO_IN
 			end else if (i_type == 6'b0 && function_code == 6'b000010 &&
 				shamt == 5'b0) begin
 				GPIO_OUT = 1'b1;
-			end
+			
 
 
 			// SRA
@@ -162,7 +162,7 @@ output GPIO_IN
 			end else if (i_type == 6'b0 && function_code == 6'b000011 &&
 					shamt == 5'b0) begin
 					GPIO_IN = 1'b1;
-			end
+			
 
 
 			// MFHI 
@@ -213,7 +213,7 @@ output GPIO_IN
 
 	//------------------------- I-TYPE -------------------------//
 
-
+		/*
 			// addi, addiu
 			end else if (i_type == 6'b001000 || i_type == 6'b001001) begin
 				regwrite_EX = 1'b1;
@@ -225,7 +225,7 @@ output GPIO_IN
 				regwrite_EX = 1'b1;
 				alu_src_EX = 2'b1;
 				shamt_EX = 5'd16; // ?? -> what should this be
-				alu_operation = 4'b1000; // sll
+				alu_op = 4'b1000; // sll
 				rdrt_EX = 1'b1;
 				
 			// ori
@@ -237,12 +237,12 @@ output GPIO_IN
 				
 			// bne
 			end else if (i_type == 6'b000101) begin
-				op_EX = 4'b0101; // sub
+				alu_op = 4'b0101; // sub
 				if (~zero_EX) begin
 					stall_FETCH = 1'b1;
 					pc_src_EX = 2'b1;
 				end
-
+			*/
 		end
 			
 	end

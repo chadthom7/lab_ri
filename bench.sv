@@ -2,13 +2,24 @@
 This testbench should read in binary numbers as GPIO_in from vector.dat 
 and convert them into hexa_decimals  in GPIO_out
 
-18 switches total, max val 2^28 - 1, cuz 2^4 -1 =1111 =15,
-0000_0000_0000_0000_0000_0000_0000_0000
+GPIO_in:
+18 switches total, max val 2^28 - 1 = 268,435,456, cuz 2^4 -1 =1111 =15,
+possible input for GPIO_in stops at bit 18
+0000_0000_0000_00_00_0000_0000_0000_0000
 example: 
-0000_0000_0000_0000_0000_0000_0000_1001
-2_3_4_5_6_7_8_9
-0010_0011_0100_0101_0110_0111_1000_1001
+0000_0000_0000_00_10_0110_0111_1000_1001
+0_0_0_2_6_7_8_9
+max of 4.5 hexadecimals as input
+
+GPIO_out:
 The display for the segments is 32 bits total
+0000_0000_0000_0000_0000_0000_0000_0000
+1000_0111_0110_0101_0100_0011_0010_0001
+8_7_6_5_4_3_2_1
+its in hex so every 4 bits i split into its hexadecimal
+each hexadecimal will be sent to a segment through hexdriver
+max displayable decimal has 8 tensplaces 87654321 so GPIO_in < 100,000,000, can equal 99,999,999 = 05F5_E0FF = 0000_0101_1111_0101_1110_0000_1111_1111
+but GPIO_in can only be 18bits or 5  hexadecimals so GPIO_in <= 262,143    = 3_FFFF
 */
 module bench;
 //____________________________________________________________
@@ -16,38 +27,30 @@ module bench;
 	reg clk, clk2, rst;
 //_____________________________________________________________
 	// TESTBENCH DATA
-	logic [61:0] vectors [149:0]; // 150 62 bit test vectors
+	logic [64:0] vectors [149:0]; // 150 65 bit test vectors
 	logic [31:0] error, vectornum; // error counter
 //_____________________________________________________________
 	// Input from switch
-	reg [31:0] GPIO_in,
+	reg [31:0] GPIO_in; //assign GPIO_in = {14'b0, SW}; // GPIO_in is 32 bits, switch is 18
 	// Output
 	reg [31:0] GPIO_out;
 	// EXPECTED Output
 	reg [31:0] GPIO_out_e;
 	// vectors:
-	// rst  GPIO_in  GPIO_out  GPIO_out_e
+	// rst  GPIO_in GPIO_out_e
 //_____________________________________________________________
-
-
 	initial begin
-		//key   = 4'b1111; // making sure keys start out as unpressed (being pressed is active low)
 		error = 0;	
 	end
-	/* instantiate the ALU we plan to test */
-	rpncalc rpncalc(.clk(clk), .rst(rst), .mode(mode), .key(key), .val(val), .top(top), .next(next), .counter(counter));
 	cpu cpu(.clk(clk), .rst(rst), .GPIO_in(GPIO_in), .GPIO_out(GPIO_out));
 	// RPNCALC CLOCK
 	always begin
 		clk = 1'b1; #5; clk = 1'b0; #5;
 	end
-
 	// CLOCK FOR DOWNLOADING VECTORS
 	always begin
 		//posedge at beginning switches to negedge for #5 to check results
 		clk2 = 1'b1; #65; clk2 = 1'b0; #5; // was #75 #5
-		//clk2 = 1'b1; #30; clk2 = 1'b0; #30; // completes cycle 6 posedges of clk later
-		//clk2 = 1'b1; #25; clk2 = 1'b0; #25; // completes cycle 5 posedges of clk later
 	end
 
 	initial begin
@@ -58,7 +61,7 @@ module bench;
 	end
 
 	always @(posedge clk2) begin
-		{mode, key, val, top_expected, next_expected, counter_expected} = vectors[vectornum]; 
+		{rst, GPIO_in, GPIO_out_e} = vectors[vectornum]; 
 		//vector doesn't need clk, rst
 		// size should be [1:0 ]+[3:0 ] +[15:0]+[15:0]+[15:0]+[7:0]
 		// 2+ 4+ 16*3 + 8 =>  14 + 16*3 => 14 + 48 = 62 bits
@@ -66,34 +69,21 @@ module bench;
 	end	
 
 	always @(negedge clk2) begin
-		if (~rst && key!= 4'b1111) begin
-		if (top!=top_expected || next != next_expected || counter != counter_expected) begin
-	$display("Error Detected: mode = %h key = %h val = %h top_expected = %h next_expected = %h counter_expected = %h", 
-				mode, key, val, top_expected, next_expected, counter_expected);
+		if (~rst) begin
+		if (GPIO_out!=GPIO_out_e) begin
+			$display("---------------------------------------------------------");	
+	$display("Error Detected: rst = %h GPIO_in = %h GPIO_out = %h GPIO_out_e = %h", 
+				rst, GPIO_in, GPIO_out, GPIO_out_e);
 			$display("");
 			//$display("hi = %h(%h expected)", hi, hi_e);
-			$display("         top = %h", top);
-			$display("top_expected = %h", top_expected);	
-			$display("");
-			//$display("lo = %h(%h expected)", lo, lo_e);
-			$display("         next = %h", next);
-			$display("next_expected = %h", next_expected);
-			$display("");
-			//$display("zero = %h(%h expected)", zero, zero_e);
-			$display("         counter = %h", counter);
-			$display("counter_expected = %h", counter_expected);	
+			$display("  GPIO_out = %h", GPIO_out);
+			$display("GPIO_out_e = %h", GPIO_out_e);	
+			$display("");	
 			error = error + 32'b1;
-			$display("---------------------------------------------------------");
+			
 		end else begin
-			$display("----------------------Passed-----------------------------------");
-/*		
-		$display("mode = %b key = %b val = %b top_expected = %b next_expected = %b counter_expected = %b", 
-				mode, key, val, top_expected, next_expected, counter_expected);
-		*/	
-			$display("mode = %h key = %h val = %h",mode, key, val);
-			$display("top_expected = %h, top = %h", top_expected, top);
-			$display("next_expected = %h, next = %h", next_expected, next);	
-			$display("counter_expected = %h, counter = %h", counter_expected, counter);
+			$display("----------------------Passed-----------------------------------");	
+			$display("rst = %h GPIO_in = %h GPIO_out = %h GPIO_out_e = %h",rst, GPIO_in, GPIO_out, GPIO_out_e);
 		end
 		end
 	end

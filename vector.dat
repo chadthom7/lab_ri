@@ -1,0 +1,26 @@
+//cpu cpu(.clk(clk), .rst(rst), .GPIO_in(GPIO_in), .GPIO_out(GPIO_out));
+// 1+1+32+32 = 66 bits
+
+//vector is 1+32+32= 65 bits
+/*
+rst  GPIO_in  GPIO_out  GPIO_out_e
+i             i                                     o 
+0_00000000000000000000000000000000_00000000000000000000000000000000
+rst         GPIO_in                              GPIO_out_e 
+0_00000000000000000000000000000000_00000000000000000000000000000000
+
+
+
+hexadecimal vector
+rst GPIO_in GPIO_out_e
+0_00000000_00000000
+*/
+
+//3_FFFF = 262,143   
+0_0003FFFF_00262143
+0_00000000_00000000
+
+
+
+
+

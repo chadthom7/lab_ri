@@ -36,7 +36,7 @@ module CSCE611_lab_ri(
 //  REG/WIRE declarations
 //=======================================================
 	// Input from switch
-	reg [31:0] GPIO_in,
+	reg [31:0] GPIO_in; // use srl to write to the register (rs)
 	// Output
 	reg [31:0] GPIO_out;
 
@@ -49,7 +49,7 @@ module CSCE611_lab_ri(
 //=======================================================
 //  Structural coding
 //=======================================================
-	cpu cpu(.clk(CLOCK_50), .rst(~KEY[0]), .GPIO_in(GPIO_in), .GPIO_out(GPIO_out));
+	cpu cpu(.clk(CLOCK_50), .rst(~KEY[0]), .GPIO_in(), .GPIO_out(GPIO_out));
 
 	assign {HEX7,HEX6,HEX5,HEX4,HEX3,HEX2,HEX1,HEX0} = segs;
 	genvar i;

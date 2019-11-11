@@ -1,0 +1,15 @@
+
+$4 is the remaining binary string/value from the input that has yet to be converted to a decimal, it decreases when a digit is added to the output
+
+$5 holds the most recent single digit that has been taken from the input
+$6 ends up being the full final output read as signle digits using hexadecimal
+
+General Purpose Input and Output
+- Does that mean SW is gpio_in and the hesdisplays are gpio_out
+GPIO_in
+GPIO_out
+The value read from GPIO (in `sra`) will be stored in the destination
+	  register (rd).
+The value written to GPIO (in `srl`) will be sourced from the source
+	  register (rs).
+

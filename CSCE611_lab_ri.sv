@@ -36,10 +36,14 @@ module CSCE611_lab_ri(
 //  REG/WIRE declarations
 //=======================================================
 	// Input from switch
-	reg [31:0] GPIO_in; // use srl to write to the register (rs)
+	reg [31:0] GPIO_in; 
 	// Output
 	reg [31:0] GPIO_out;
-
+	/*The value read from GPIO (in `sra`) will be stored in the destination
+	  register (rd).
+	The value written to GPIO (in `srl`) will be sourced from the source
+	  register (rs).
+	*/
 	logic [55:0] segs;
 	/* 8 displays of 7 bits, 8*7=56
 	   make for loop to assign all hex displays instead of typing 8 hexdriver instantiations

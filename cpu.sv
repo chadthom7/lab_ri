@@ -6,11 +6,11 @@ module cpu (
 
 	input [0:0 ] clk,			/* clock */
 	input [0:0 ] rst,			/* reset */
-	input [31:0] gpio_in,	/* GPIO input */
+	input logic [31:0] gpio_in,	/* GPIO input */
 
 /**** outputs ****************************************************************/
 
-	output [31:0] gpio_out	/* GPIO output */
+	output logic [31:0] gpio_out	/* GPIO output */
 
 );
 
@@ -108,9 +108,7 @@ module cpu (
 	
 	// Register
 	regfile myregfile (.clk(clk),
-				
 				.rst(rst),
-
 				// execute (decode)
 				.readaddr1(instruction_EX[25:21]), // RS address
 				.readaddr2(instruction_EX[20:16]), // RT address
@@ -135,17 +133,18 @@ module cpu (
 	//Execute Stage----------------------------------------------------------------------------------	
 	// Control Unit (Decode Instructions) 	
 	controlUnit CU (.clk(clk),
-					.rst(rst),
-					.shamt(instruction_EX[10:6]), 
-					.function_code(instruction_EX[5:0]),
-					.i_type(instruction_EX[31:26]),
-					.alu_op(op_EX),
-					.shamt_EX(shamt_EX),
-					.enhilo_EX(enhilo_EX),
-					.regsel_EX(regsel_EX),
-					.regwrite_EX(regwrite_EX),.rdrt_EX(rdrt_EX),
-					.GPIO_OUT(GPIO_out_en),
-					.GPIO_IN(GPIO_in_en));
+			.rst(rst),
+			.i_type(instruction_EX[31:26]),
+			.shamt(instruction_EX[10:6]), 
+			.function_code(instruction_EX[5:0]),
+			.alu_op(op_EX),
+			.enhilo_EX(enhilo_EX),
+			.shamt_EX(shamt_EX),
+			.regsel_EX(regsel_EX),
+			.regwrite_EX(regwrite_EX),
+			.rdrt_EX(rdrt_EX),
+			.GPIO_OUT(GPIO_out_en),
+			.GPIO_IN(GPIO_in_en));
 
 		
 

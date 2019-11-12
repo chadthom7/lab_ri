@@ -2,25 +2,27 @@ module controlUnit (
 
 input clk, rst,
 
-input [5:0] i_type,
+input logic [5:0] i_type,
 
-input [4:0] shamt /* <-instruction_EX[10:6] */ , function_code /* <-instruction_EX[5:0] */ , 
+input logic [4:0] shamt /* <-instruction_EX[10:6] */ , 
 
-output [3:0] alu_op, // op_EX
+function_code /* <-instruction_EX[5:0] */ , 
 
-output [4:0] shamt_EX, // shamt_EX[4:0] 
+output logic [3:0] alu_op, // op_EX
 
-output [1:0] regsel_EX, 
+output logic [4:0] shamt_EX, // shamt_EX[4:0] 
 
-output enhilo_EX,
+output logic [1:0] regsel_EX, 
 
-output regwrite_EX,
+output logic enhilo_EX,
 
-output rdrt_EX,
+output logic regwrite_EX,
 
-output GPIO_OUT,
+output logic rdrt_EX,
 
-output GPIO_IN
+output logic GPIO_OUT,
+
+output logic GPIO_IN
 
 );
 
@@ -29,7 +31,7 @@ output GPIO_IN
 // regsel_EX // 1 for mfhi, 2 for mflo, 0 for everything else
 
 // Control Unit Logic
-	always @(*) begin
+	always_ff @(posedge clk, posedge rst) begin//always @(*) begin
 		// alu_op = 4'b0000; // '0000' is op code for AND
 		// regsel_EX = 2'b00;
 		// regwrite_EX = 1'b0;			   // don't write a register

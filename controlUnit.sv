@@ -29,7 +29,7 @@ output GPIO_IN
 // regsel_EX // 1 for mfhi, 2 for mflo, 0 for everything else
 
 // Control Unit Logic
-	always_comb begin
+	always @(*) begin
 		// alu_op = 4'b0000; // '0000' is op code for AND
 		// regsel_EX = 2'b00;
 		// regwrite_EX = 1'b0;			   // don't write a register

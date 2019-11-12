@@ -52,7 +52,7 @@ module CSCE611_lab_ri(
 //  Structural coding
 //=======================================================
 	assign GPIO_in = {14'b0, SW}; // GPIO_in is 32 bits, switch is 18
-	cpu cpu(.clk(CLOCK_50), .rst(~KEY[0]), .GPIO_in(GPIO_in), .GPIO_out(GPIO_out));
+	cpu cpu(.clk(CLOCK_50), .rst(~KEY[0]), .gpio_in(GPIO_in), .gpio_out(GPIO_out));
 
 	assign {HEX7,HEX6,HEX5,HEX4,HEX3,HEX2,HEX1,HEX0} = segs;
 	genvar i;

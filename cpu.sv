@@ -58,7 +58,7 @@ module cpu (
 
 		// Load MIPS program // TODO // Create actual .dat file for MIPS code //--------------------------------------//
 	initial begin
-		$readmemh("counter.dat", instruction_memory); 
+		$readmemh("instemem.dat", instruction_memory); 
 	end
 
 	// ALU mux

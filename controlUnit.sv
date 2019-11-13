@@ -43,7 +43,7 @@ output logic GPIO_IN //en
 // regsel_EX 		// 1 for mfhi, 2 for mflo, 0 for everything else
 
 // Control Unit Logic
-	always_ff @(posedge clk, posedge rst) begin//always @(*) begin
+	always_comb begin//always @(*) begin
 		// alu_op = 4'b0000; // '0000' is op code for AND
 		// regsel_EX = 2'b00;
 		// regwrite_EX = 1'b0;			   // don't write a register
@@ -363,13 +363,13 @@ output logic GPIO_IN //en
 				regwrite_EX = 1'b1; //1 if writing to a reg
 				rdrt_EX = 1'b1;
 				memwrite_EX = 1'b1;
-				alu_src_EX = 2'b1; // Don't know how this works
+				alu_src_EX = 2'b01; // alusrc = something for this
 				GPIO_OUT = 1'b0;
 				GPIO_IN = 1'b0;
 			// addi, addiu
 			end else if (i_type == 6'b001000 || i_type == 6'b001001) begin
 				alu_op = 4'b0100;
-				shamt_EX = 5'bXXXXX;				
+				shamt_EX = 5'bXXXXX; // can alsodo 5'dX				
 				enhilo_EX = 1'b0;
 				regsel_EX = 2'b00;
 				regwrite_EX = 1'b1;

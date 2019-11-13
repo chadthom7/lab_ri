@@ -6,7 +6,7 @@ module cpu (
 
 	input [0:0 ] clk,			/* clock */
 	input [0:0 ] rst,			/* reset */
-	input logic[31:0] gpio_in,	/* GPIO input */
+	input logic [31:0] gpio_in,	/* GPIO input */
 
 /**** outputs ****************************************************************/
 

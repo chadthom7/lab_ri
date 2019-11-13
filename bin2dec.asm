@@ -1,8 +1,8 @@
 	.text
 #-------------------------------------------------------------------------------------------
-	li 	$2,429496730	#regs(2) <= 0.1
+	li 	$2,429496730	#regs(2) <= 0.1    # li is split into lui and ori when compiled
 	li	$3,10		#regs(3) <= 10
-	li	$4, 23456789	#user input (replace with sra)
+	li	$4, 23456789	#user input (replace with sra) sra $11, $11, 0
 	
 	multu	$4,$2			#have to use mult unsigned, bc if > .5, most sig decimal bit is 1	
 					#  which can be read as decimal bit  

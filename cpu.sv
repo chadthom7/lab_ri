@@ -6,7 +6,7 @@ module cpu (
 
 	input [0:0 ] clk,			/* clock */
 	input [0:0 ] rst,			/* reset */
-	input logic [31:0] gpio_in,	/* GPIO input */
+	input logic[31:0] gpio_in,	/* GPIO input */
 
 /**** outputs ****************************************************************/
 
@@ -58,7 +58,7 @@ module cpu (
 
 		// Load MIPS program // TODO // Create actual .dat file for MIPS code //--------------------------------------//
 	initial begin
-		$readmemh("instemem.dat", instruction_memory); 
+		$readmemh("counter.dat", instruction_memory); 
 	end
 
 	// ALU mux
@@ -138,11 +138,13 @@ module cpu (
 			.shamt(instruction_EX[10:6]), 
 			.function_code(instruction_EX[5:0]),
 			.alu_op(op_EX),
-			.enhilo_EX(enhilo_EX),
 			.shamt_EX(shamt_EX),
+			.enhilo_EX(enhilo_EX),
 			.regsel_EX(regsel_EX),
 			.regwrite_EX(regwrite_EX),
 			.rdrt_EX(rdrt_EX),
+			.memwrite_EX(memwrite_EX),
+			.alu_src_EX(alu_src_EX),
 			.GPIO_OUT(GPIO_out_en),
 			.GPIO_IN(GPIO_in_en));
 

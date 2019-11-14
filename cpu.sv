@@ -57,6 +57,9 @@ module cpu (
 
 	// Enable hi or lo
 	logic enhilo_EX;
+
+	// Ouput from MUX of ALU & CU
+	logic [31:0] regdatain_WB;
 	
 
 		// Load MIPS program // TODO // Create actual .dat file for MIPS code //--------------------------------------//

@@ -54,6 +54,9 @@ module cpu (
 	
 	// Control Unit signal 
 	logic [1:0] regsel_EX;
+
+	// Enable hi or lo
+	logic enhilo_EX;
 	
 
 		// Load MIPS program // TODO // Create actual .dat file for MIPS code //--------------------------------------//
@@ -104,10 +107,13 @@ module cpu (
 			// if(regsel_EX) // -> Finish logic for regsel_EX to regsel_WB, maybe?
 			regwrite_WB <= regwrite_EX;
 			writeaddr_WB <= rdrt_EX == 1'b0 ? instruction_EX[15:11] : instruction_EX[20:16];
-			lo_WB <= GPIO_in_en == 1'b0 ? lo_EX : gpio_in; 
+			lo_WB <= GPIO_in_en == 1'b0 ? lo_EX : gpio_in;  // ------------------------------------Will Be pArt of Mux for regfile writeback-------//
 		end
 	end
 	
+
+
+
 
 /*regdata_WB = 
 if statement using (regsel_WB,[r_WB,hi_WB,lo_WB,GPIO_in], and regwrite_WB, and regdest_WB)

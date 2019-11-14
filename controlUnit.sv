@@ -59,7 +59,7 @@ output logic GPIO_IN //en
 		// stall_FETCH = 1'b0;
 
 
-		// if (~stall_FETCH) begin // -> Was before I-Type instructions 
+		 
 
 			// ADD
 			if (i_type == 6'd0 && function_code == 6'b100000 |
@@ -353,7 +353,13 @@ output logic GPIO_IN //en
 				GPIO_IN = 1'b0;
 
 			*/
+
+
+			
+
 	//------------------------- I-TYPE -------------lui,adi,addiu,andi,ori,xori,slti----//
+		// if (~stall_FETCH) begin 
+
 			// lui
 			end else if (i_type == 6'b001111) begin
 				alu_op = 4'b1000; // sll

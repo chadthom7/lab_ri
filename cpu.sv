@@ -61,7 +61,7 @@ module cpu (
 		$readmemh("counter.dat", instruction_memory); 
 	end
 
-	// ALU mux
+	// ALU mux //handles alusrc_EX //pg 35 slides
 	assign B_EX = alu_src_EX == 2'b0 ? readdata2_EX : alu_src_EX == 2'b1 ? {{16{instruction_EX[15]}},instruction_EX[15:0]} : {16'b0,instruction_EX[15:0]};
 
 
@@ -79,7 +79,7 @@ module cpu (
 	*/
 	
 	
-	// FETCH stage----------------------------------------------------------------------------------
+// FETCH stage----------------------------------------------------------------------------------
 	always_ff @(posedge clk, posedge rst) begin
 
 		if (rst) begin
@@ -91,7 +91,7 @@ module cpu (
 		end
 	end
 	
-	// Pipeline Registers or Writeback Stage-----------------------------------------------------------------------------
+// Pipeline Registers or Writeback Stage-----------------------------------------------------------------------------
 	always_ff @(posedge clk,posedge rst) begin
 
 		// Develop this logic for the mux
@@ -106,6 +106,12 @@ module cpu (
 		end
 	end
 	
+
+/*regdata_WB = 
+if statement using (regsel_WB,[r_WB,hi_WB,lo_WB,GPIO_in], and regwrite_WB, and regdest_WB)
+pg 37
+
+*/	
 	// Register
 	regfile myregfile (.clk(clk),
 				.rst(rst),

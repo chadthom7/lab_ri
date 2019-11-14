@@ -93,7 +93,7 @@ output logic GPIO_IN //en
 			end else if (i_type == 6'd0 && function_code == 6'b011000) begin
 				alu_op = 4'b0110;
 				shamt_EX = 5'bXXXXX;
-				enhilo_EX = 1'b1;
+				enhilo_EX = 1'b1; // 1 for MULT
 				regsel_EX = 2'b00;
 				regwrite_EX = 1'b0;
 				rdrt_EX = 1'b0;
@@ -106,7 +106,7 @@ output logic GPIO_IN //en
 			end else if (i_type == 6'd0 && function_code == 6'b011001) begin
 				alu_op = 4'b0111;
 				shamt_EX = 5'bXXXXX;
-				enhilo_EX = 1'b1;
+				enhilo_EX = 1'b1; // 1 for MULT
 				regsel_EX = 2'b00;
 				regwrite_EX = 1'b0;
 				rdrt_EX = 1'b0;
@@ -180,9 +180,9 @@ output logic GPIO_IN //en
 				GPIO_OUT = 1'b0;
 				GPIO_IN = 1'b0;
 
-			// SRL (don't write or read to gpio)
+			// SRL 
 			end else if (i_type == 6'd0 && function_code == 6'b000010 &&
-				shamt != 5'b0) begin 
+				shamt != 5'd0) begin 
 				alu_op = 4'b1001;
 				shamt_EX = shamt;
 				enhilo_EX = 1'b0;
@@ -197,32 +197,32 @@ output logic GPIO_IN //en
 
 			// srl (gpio write) (shamt == 0)
 			end else if (i_type == 6'd0 && function_code == 6'b000010 &&
-				shamt == 5'b0) begin 
-				alu_op = 4'b1001;
-				shamt_EX = shamt;
+				shamt == 5'd0) begin 
+				alu_op = 4'bXXXX;
+				shamt_EX = 5'dX;
 				enhilo_EX = 1'b0;
-				regsel_EX = 2'b00;
+				regsel_EX = 2'b00; // select register to write to (rs) 
 				regwrite_EX = 1'b1;
 				rdrt_EX = 1'b0;
 				memwrite_EX = 1'b0; 
 				alu_src_EX = 2'd0;
 				
-				GPIO_OUT = 1'b1; //WRITE TO GPIO OUT
+				GPIO_OUT = 1'b1; // WRITE TO GPIO OUT
 				GPIO_IN = 1'b0;
 			
 
 
-			// SRA  (don't write or read to gpio)
+			// SRA 
 			end else if (i_type == 6'd0 && function_code == 6'b000011&&
 					shamt != 5'd0) begin 
-				alu_op = 4'b1010;//
-				shamt_EX = shamt;//
-				enhilo_EX = 1'b0;//
-				regsel_EX = 2'b00;//
-				regwrite_EX = 1'b1;//	
-				rdrt_EX = 1'b0; //
-				memwrite_EX = 1'b0; // 
-				alu_src_EX = 2'd0; //
+				alu_op = 4'b1010;
+				shamt_EX = shamt;
+				enhilo_EX = 1'b0;
+				regsel_EX = 2'b00;
+				regwrite_EX = 1'b1;	
+				rdrt_EX = 1'b0;
+				memwrite_EX = 1'b0;
+				alu_src_EX = 2'd0;
 				GPIO_OUT = 1'b0;
 				GPIO_IN = 1'b0;
 
@@ -230,15 +230,15 @@ output logic GPIO_IN //en
 			// sra (gpio read)
 			end else if (i_type == 6'd0 && function_code == 6'b000011 &&
 					shamt == 5'd0) begin
-				alu_op = 4'b1010; // changed from 1000, idk why it was that
-				shamt_EX = shamt;
+				alu_op = 4'dX; 
+				shamt_EX = 5'dX;
 				enhilo_EX = 1'b0;
-				regsel_EX = 2'b01; //GPIO register input en val
-				regwrite_EX = 1'b1; 
+				regsel_EX = 2'b01; // select register to read from (rd) (rd=01)
+				regwrite_EX = 1'b0;
 				rdrt_EX = 1'b0;
 				memwrite_EX = 1'b0; 
 				alu_src_EX = 2'd0;
-					
+				
 				GPIO_OUT = 1'b0;
 				GPIO_IN = 1'b1;	  // READ FROM GPIO IN
 			
@@ -340,18 +340,6 @@ output logic GPIO_IN //en
 				alu_src_EX = 2'b0;  // used in I-type - default 0
 				GPIO_OUT = 1'b0;  //1 for srl
 				GPIO_IN = 1'b0;	 // 1 for sra			
-				
-				alu_op = 4'b0100; // op_EX
-				shamt_EX = 5'bXXXXX;
-				enhilo_EX = 1'b0;       
-				regsel_EX = 2'b00;
-				regwrite_EX = 1'b1;
-				rdrt_EX = 1'b0;
-				memwrite_EX = 1'b0; 
-				alu_src_EX = 2'b0;
-				GPIO_OUT = 1'b0;
-				GPIO_IN = 1'b0;
-
 			*/
 
 

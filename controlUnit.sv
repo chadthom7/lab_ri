@@ -352,7 +352,7 @@ output logic GPIO_IN //en
 		// if (~stall_FETCH) begin 
 
 			// lui
-			end else if (i_type == 6'b001111) begin
+			end else if (i_type == 6'b001111) begin  // load immediate value into the upper half-word of register rt
 				alu_op = 4'b1000; // sll
 				shamt_EX = 5'd16; // ?? -> what should this be
 				enhilo_EX = 1'b0;

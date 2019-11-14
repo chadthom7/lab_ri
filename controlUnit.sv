@@ -200,6 +200,7 @@ output logic GPIO_IN //en
 				shamt == 5'd0) begin 
 				alu_op = 4'bXXXX;
 				shamt_EX = 5'dX;
+
 				enhilo_EX = 1'b0;
 				regsel_EX = 2'b00; // select register to write to (rs) 
 				regwrite_EX = 1'b1;
@@ -223,6 +224,7 @@ output logic GPIO_IN //en
 				rdrt_EX = 1'b0;
 				memwrite_EX = 1'b0;
 				alu_src_EX = 2'd0;
+
 				GPIO_OUT = 1'b0;
 				GPIO_IN = 1'b0;
 
@@ -239,6 +241,7 @@ output logic GPIO_IN //en
 				memwrite_EX = 1'b0; 
 				alu_src_EX = 2'd0;
 				
+
 				GPIO_OUT = 1'b0;
 				GPIO_IN = 1'b1;	  // READ FROM GPIO IN
 			

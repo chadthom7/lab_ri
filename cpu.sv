@@ -43,7 +43,7 @@ module cpu (
 	logic [1:0] alu_src_EX;
 	logic rdrt_EX;
 
-	// PC control for Jump and Branch Instructions
+	// PC control for Jump and Branch Instructions 
 	logic [1:0] pc_src_EX;
 	logic stall_FETCH,stall_EX;
 
@@ -54,6 +54,9 @@ module cpu (
 	
 	// Control Unit signal 
 	logic [1:0] regsel_EX;
+
+	// Enable hi or lo
+	logic enhilo_EX;
 	
 
 		// Load MIPS program // TODO // Create actual .dat file for MIPS code //--------------------------------------//
@@ -104,10 +107,13 @@ module cpu (
 			// if(regsel_EX) // -> Finish logic for regsel_EX to regsel_WB, maybe?
 			regwrite_WB <= regwrite_EX;
 			writeaddr_WB <= rdrt_EX == 1'b0 ? instruction_EX[15:11] : instruction_EX[20:16];
-			lo_WB <= GPIO_in_en == 1'b0 ? lo_EX : gpio_in; 
+			lo_WB <= GPIO_in_en == 1'b0 ? lo_EX : gpio_in;  // ------------------------------------Will Be pArt of Mux for regfile writeback-------//
 		end
 	end
 	
+
+
+
 
 /*regdata_WB = 
 if statement using (regsel_WB,[r_WB,hi_WB,lo_WB,GPIO_in], and regwrite_WB, and regdest_WB)
@@ -116,45 +122,45 @@ pg 37
 */	
 	// Register
 	regfile myregfile (.clk(clk),
-				.rst(rst),
-				// execute (decode)
-				.readaddr1(instruction_EX[25:21]), // RS address
-				.readaddr2(instruction_EX[20:16]), // RT address
-				.readdata1(A_EX),
-				.readdata2(readdata2_EX),
+						.rst(rst),
+						// execute (decode)
+						.readaddr1(instruction_EX[25:21]), // RS address
+						.readaddr2(instruction_EX[20:16]), // RT address
+						.readdata1(A_EX),
+						.readdata2(readdata2_EX),
 				
-				// writeback
-				.we(regwrite_WB),
-				.writeaddr(writeaddr_WB),
-				.writedata(lo_WB));
+						// writeback
+						.we(regwrite_WB),
+						.writeaddr(writeaddr_WB),
+						.writedata(lo_WB));
 	
 	// ALU (execute stage)
 	alu myalu (.a(A_EX),
-		   .b(B_EX),
-		   .shamt(shamt_EX),
-		   .op(op_EX),
-		   .lo(lo_EX),
-		   .hi(hi_EX),
-		   .zero(zero_EX));
+		   		.b(B_EX),
+		   		.shamt(shamt_EX),
+		   		.op(op_EX),
+		   		.lo(lo_EX),
+		   		.hi(hi_EX),
+		   		.zero(zero_EX));
 
 
 	//Execute Stage----------------------------------------------------------------------------------	
 	// Control Unit (Decode Instructions) 	
 	controlUnit CU (.clk(clk),
-			.rst(rst),
-			.i_type(instruction_EX[31:26]),
-			.shamt(instruction_EX[10:6]), 
-			.function_code(instruction_EX[5:0]),
-			.alu_op(op_EX),
-			.shamt_EX(shamt_EX),
-			.enhilo_EX(enhilo_EX),
-			.regsel_EX(regsel_EX),
-			.regwrite_EX(regwrite_EX),
-			.rdrt_EX(rdrt_EX),
-			.memwrite_EX(memwrite_EX),
-			.alu_src_EX(alu_src_EX),
-			.GPIO_OUT(GPIO_out_en),
-			.GPIO_IN(GPIO_in_en));
+					.rst(rst),
+					.i_type(instruction_EX[31:26]),
+					.shamt(instruction_EX[10:6]), 
+					.function_code(instruction_EX[5:0]),
+					.alu_op(op_EX),
+					.shamt_EX(shamt_EX),
+					.enhilo_EX(enhilo_EX),
+					.regsel_EX(regsel_EX),
+					.regwrite_EX(regwrite_EX),
+					.rdrt_EX(rdrt_EX),
+					.memwrite_EX(memwrite_EX),
+					.alu_src_EX(alu_src_EX),
+					.GPIO_OUT(GPIO_out_en),
+					.GPIO_IN(GPIO_in_en));
 
 		
 

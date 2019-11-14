@@ -71,12 +71,12 @@ module cpu (
 			if (GPIO_out_en) gpio_out <= readdata2_EX;
 	end
 
-	/*
+	
 	always_ff @(posedge clk,posedge rst) begin
 		if (rst) stall_EX <= 1'b0; else stall_EX <= stall_FETCH;
 	end
 
-	*/
+	
 	
 	
 // FETCH stage----------------------------------------------------------------------------------

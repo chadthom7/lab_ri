@@ -5,16 +5,45 @@ $5 holds the most recent single digit that has been taken from the input
 $6 ends up being the full final output read as signle digits using hexadecimal
 
 General Purpose Input and Output
-- Does that mean SW is gpio_in and the hesdisplays are gpio_out
+- Does that mean SW is gpio_in and the hesdisplays are gpio_out? pretty much
 GPIO_in
 GPIO_out
-The value read from GPIO (in `sra`) will be stored in the destination (i think sra should be srl)
+
+The value read from GPIO_in (in `sra`) will be stored in the destination
+
 	  register (rd).
-The value written to GPIO (in `srl`) will be sourced from the source
+The value written to GPIO_out (in `srl`) will be sourced from the source
 	  register (rs).
 	  
-	  
+
 Counter.dat = instemem.dat
+
+
+Pipelining:
+FEW, each can work on a different instruction
+each instruction must have it's F,E,and W done in different cycles starting with F->E->W
+
+Fetch just gets the 32 bits of instruction_EX
+
+
+Need to add:
+
+	Memory data for I-type, inbetween EX and WB that considers signal from		(MUX INSIDE CPU)
+				memwrite_EX
+				lo_EX - from alu output
+				readdata2_EX - from regfile
+		---Combined signals output memdata_WB
+
+	
+//Might be added already
+---	Utilize alusrc_EX for before setting ALU input, to handle sign/zero extend       (MUX INSIDE CPU)
+			must consider:
+				instruction_EX[15:0]  		(sign/zero extend)
+				alusrc_EX
+				readdata2       	 Regfile_output:   either  output [31:0] readdata1, output [31:0] readdata2 
+							        //( I think readdata1 is sent directly to ALU)
+						
+
 
 
 Pipelining:

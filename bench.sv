@@ -42,7 +42,7 @@ module bench;
 	initial begin
 		error = 0;	
 	end
-	cpu cpu(.clk(clk), .rst(rst), .GPIO_in(GPIO_in), .GPIO_out(GPIO_out));
+	cpu cpu(.clk(clk), .rst(rst), .gpio_in(GPIO_in), .gpio_out(GPIO_out));
 	// RPNCALC CLOCK
 	always begin
 		clk = 1'b1; #5; clk = 1'b0; #5;

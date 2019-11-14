@@ -1,8 +1,8 @@
-module hexdriver (input [3:0] hexnum, output reg [6:0] HEX);
+module hexdriver (input [3:0] val, output reg [6:0] HEX);
 // displays are active low
 
 	always_comb
-		case(hexnum)
+		case(val)
 		4'h0: begin
 		HEX <= 7'b100_0000; // 0
 		end
@@ -85,4 +85,3 @@ HEX2 <= 7'b001_1000; // 9
 		4'b1110 : HEX = 7'b000_0110; // E -> 14
 		4'b1111 : HEX = 7'b000_1110; // F -> 15
 */
-		default : HEX = 7'b000_0000; // Default Required

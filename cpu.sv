@@ -6,11 +6,11 @@ module cpu (
 
 	input [0:0 ] clk,			/* clock */
 	input [0:0 ] rst,			/* reset */
-	input [31:0] gpio_in,	/* GPIO input */
+	input logic [31:0] gpio_in,	/* GPIO input */
 
 /**** outputs ****************************************************************/
 
-	output [31:0] gpio_out	/* GPIO output */
+	output logic [31:0] gpio_out	/* GPIO output */
 
 );
 
@@ -61,7 +61,7 @@ module cpu (
 		$readmemh("counter.dat", instruction_memory); 
 	end
 
-	// ALU mux
+	// ALU mux //handles alusrc_EX //pg 35 slides
 	assign B_EX = alu_src_EX == 2'b0 ? readdata2_EX : alu_src_EX == 2'b1 ? {{16{instruction_EX[15]}},instruction_EX[15:0]} : {16'b0,instruction_EX[15:0]};
 
 
@@ -79,7 +79,7 @@ module cpu (
 	*/
 	
 	
-	// FETCH stage----------------------------------------------------------------------------------
+// FETCH stage----------------------------------------------------------------------------------
 	always_ff @(posedge clk, posedge rst) begin
 
 		if (rst) begin
@@ -91,7 +91,7 @@ module cpu (
 		end
 	end
 	
-	// Pipeline Registers or Writeback Stage-----------------------------------------------------------------------------
+// Pipeline Registers or Writeback Stage-----------------------------------------------------------------------------
 	always_ff @(posedge clk,posedge rst) begin
 
 		// Develop this logic for the mux ?
@@ -106,11 +106,15 @@ module cpu (
 		end
 	end
 	
+
+/*regdata_WB = 
+if statement using (regsel_WB,[r_WB,hi_WB,lo_WB,GPIO_in], and regwrite_WB, and regdest_WB)
+pg 37
+
+*/	
 	// Register
 	regfile myregfile (.clk(clk),
-				
 				.rst(rst),
-
 				// execute (decode)
 				.readaddr1(instruction_EX[25:21]), // RS address
 				.readaddr2(instruction_EX[20:16]), // RT address
@@ -135,17 +139,20 @@ module cpu (
 	//Execute Stage----------------------------------------------------------------------------------	
 	// Control Unit (Decode Instructions) 	
 	controlUnit CU (.clk(clk),
-					.rst(rst),
-					.shamt(instruction_EX[10:6]), 
-					.function_code(instruction_EX[5:0]),
-					.i_type(instruction_EX[31:26]),
-					.alu_op(op_EX),
-					.shamt_EX(shamt_EX),
-					.enhilo_EX(enhilo_EX),
-					.regsel_EX(regsel_EX),
-					.regwrite_EX(regwrite_EX),.rdrt_EX(rdrt_EX),
-					.GPIO_OUT(GPIO_out_en),
-					.GPIO_IN(GPIO_in_en));
+			.rst(rst),
+			.i_type(instruction_EX[31:26]),
+			.shamt(instruction_EX[10:6]), 
+			.function_code(instruction_EX[5:0]),
+			.alu_op(op_EX),
+			.shamt_EX(shamt_EX),
+			.enhilo_EX(enhilo_EX),
+			.regsel_EX(regsel_EX),
+			.regwrite_EX(regwrite_EX),
+			.rdrt_EX(rdrt_EX),
+			.memwrite_EX(memwrite_EX),
+			.alu_src_EX(alu_src_EX),
+			.GPIO_OUT(GPIO_out_en),
+			.GPIO_IN(GPIO_in_en));
 
 		
 

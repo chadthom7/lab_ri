@@ -4,9 +4,7 @@ input clk, rst,
 
 input logic [5:0] i_type,
 
-input logic [4:0] shamt /* <-instruction_EX[10:6] */ , 
-
-function_code /* <-instruction_EX[5:0] */ , 
+input logic [4:0] shamt /* <-instruction_EX[10:6] */ , function_code /* <-instruction_EX[5:0] */ , 
 
 output logic [3:0] alu_op, // op_EX
 
@@ -28,6 +26,7 @@ output logic rdrt_EX, // selects register write addr // chooses destination of r
 
 // add regdest_WB?
 output logic memwrite_EX, // set to 1 for SW
+
 //alusrc //determines what b alu uses; readdata1, readdata2, instr[15:11]
 output logic [1:0] alu_src_EX,
 
@@ -59,7 +58,7 @@ output logic GPIO_IN //en
 		// stall_FETCH = 1'b0;
 
 
-		 
+		if (~stall_FETCH) begin
 
 			// ADD
 			if (i_type == 6'd0 && function_code == 6'b100000 |
@@ -349,7 +348,7 @@ output logic GPIO_IN //en
 			
 
 	//------------------------- I-TYPE -------------lui,adi,addiu,andi,ori,xori,slti----//
-		// if (~stall_FETCH) begin 
+		 
 
 			// lui
 			end else if (i_type == 6'b001111) begin  // load immediate value into the upper half-word of register rt

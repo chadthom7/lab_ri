@@ -87,9 +87,11 @@ module cpu (
 			instruction_EX <= 32'b0;
 		end else begin
 			instruction_EX <= instruction_memory[PC_FETCH]; 
-			PC_FETCH <= PC_FETCH + 12'b1;  // for jump and branch-> pc_src_EX == 2'b0 ? PC_FETCH + 12'b1 : PC_FETCH + instruction_EX[11:0];
+			PC_FETCH <=  pc_src_EX == 2'b0 ? PC_FETCH + 12'b1 : PC_FETCH + instruction_EX[11:0];
 		end
 	end
+
+	/*PC_FETCH + 12'b1;  // for jump and branch->*/
 	
 // Pipeline Registers or Writeback Stage-----------------------------------------------------------------------------
 	always_ff @(posedge clk,posedge rst) begin

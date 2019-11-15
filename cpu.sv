@@ -67,8 +67,10 @@ module cpu (
 		$readmemh("instmem.dat", instruction_memory); // rename to instmem.dat later
 	end
 
-	// ALU mux //handles alusrc_EX //pg 35 slides
-	assign B_EX = alu_src_EX == 2'd0 ? readdata2_EX : alu_src_EX == 2'd1 ? {{16{instruction_EX[15]}},instruction_EX[15:0]} : {16'd0,instruction_EX[15:0]};
+
+	// ALU mux 
+	assign B_EX = alu_src_EX == 2'b0 ? readdata2_EX : alu_src_EX == 2'b1 ? {{16{instruction_EX[15]}},instruction_EX[15:0]} : {16'b0,instruction_EX[15:0]};
+
 
 
 	
@@ -83,6 +85,7 @@ module cpu (
 	end
 
 	
+
 	
 	
 // FETCH stage----------------------------------------------------------------------------------

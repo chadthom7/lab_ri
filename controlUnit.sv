@@ -338,7 +338,7 @@ output logic GPIO_IN //en
 				regsel_EX = 2'b00;	//only  for mflo mfhi gpio, else 0
 				regwrite_EX = 1'b1; //all besides mults
 				rdrt_EX = 1'b0;  //0 for R, 1 for I// handles immediate val
-				memwrite_EX = 1'b0; // used in I type- defualt 0
+				memwrite_EX = 1'b0; // used in I type- defualt 0 // Used for lui
 				alu_src_EX = 2'b00;  // used in I-type - default 0
 				GPIO_OUT = 1'b0;  //1 for srl
 				GPIO_IN = 1'b0;	 // 1 for sra			

@@ -340,12 +340,13 @@ output logic GPIO_IN //en
 				regwrite_EX = 1'b1; //all besides mults
 				rdrt_EX = 1'b0;  //0 for R, 1 for I// handles immediate val
 				memwrite_EX = 1'b0; // used in I type- defualt 0
-				alu_src_EX = 2'b0;  // used in I-type - default 0
+				alu_src_EX = 2'b00;  // used in I-type - default 0
 				GPIO_OUT = 1'b0;  //1 for srl
 				GPIO_IN = 1'b0;	 // 1 for sra			
 			*/
 
-
+			// alusrc tells whether to do sign,extend and zero extend... the most sig-bit will be captured in the cpu
+			// when value is alusrc = 1 consider sign, = 2 or 3 consider zero, = 0 just pass RD2 directly
 			
 
 	//------------------------- I-TYPE -------------lui,adi,addiu,andi,ori,xori,slti----//
@@ -360,7 +361,7 @@ output logic GPIO_IN //en
 				regwrite_EX = 1'b1; //1 if writing to a reg
 				rdrt_EX = 1'b1;
 				memwrite_EX = 1'b1;
-				alu_src_EX = 2'b01; // alusrc = something for this
+				alu_src_EX = 2'b01; // 
 				GPIO_OUT = 1'b0;
 				GPIO_IN = 1'b0;
 			// addi, addiu

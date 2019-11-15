@@ -68,18 +68,18 @@ module cpu (
 	end
 
 	// ALU mux //handles alusrc_EX //pg 35 slides
-	assign B_EX = alu_src_EX == 2'b0 ? readdata2_EX : alu_src_EX == 2'b1 ? {{16{instruction_EX[15]}},instruction_EX[15:0]} : {16'b0,instruction_EX[15:0]};
+	assign B_EX = alu_src_EX == 2'd0 ? readdata2_EX : alu_src_EX == 2'd1 ? {{16{instruction_EX[15]}},instruction_EX[15:0]} : {16'd0,instruction_EX[15:0]};
 
 
 	
 	always_ff @(posedge clk, posedge rst) begin
-		if (rst) gpio_out <= 32'b0; else
+		if (rst) gpio_out <= 32'd0; else
 			if (GPIO_out_en) gpio_out <= readdata2_EX;
 	end
 
 	
 	always_ff @(posedge clk,posedge rst) begin
-		if (rst) stall_EX <= 1'b0; else stall_EX <= stall_FETCH;
+		if (rst) stall_EX <= 1'd0; else stall_EX <= stall_FETCH;
 	end
 
 	
@@ -89,11 +89,11 @@ module cpu (
 	always_ff @(posedge clk, posedge rst) begin
 
 		if (rst) begin
-			PC_FETCH <= 12'b0;
-			instruction_EX <= 32'b0;
+			PC_FETCH <= 12'd0;
+			instruction_EX <= 32'd0;
 		end else begin
 			instruction_EX <= instruction_memory[PC_FETCH]; 
-			PC_FETCH <=  pc_src_EX == 2'b0 ? PC_FETCH + 12'b1 : PC_FETCH + instruction_EX[11:0];
+			PC_FETCH <=  pc_src_EX == 2'd0 ? PC_FETCH + 12'd1 : PC_FETCH + instruction_EX[11:0];
 		end
 	end
 
@@ -105,12 +105,12 @@ module cpu (
 		// Develop this logic for the mux ?
 
 		if (rst) begin
-			regwrite_WB <= 1'b0;
+			regwrite_WB <= 1'd0;
 		end else begin
 			// if(regsel_EX) // -> Finish logic for regsel_EX to regsel_WB, maybe?
 			regwrite_WB <= regwrite_EX;
-			writeaddr_WB <= rdrt_EX == 1'b0 ? instruction_EX[15:11] : instruction_EX[20:16];
-			lo_WB <= GPIO_in_en == 1'b0 ? lo_EX : gpio_in;  // ------------------------------------Will Be pArt of Mux for regfile writeback-------//
+			writeaddr_WB <= rdrt_EX == 1'd0 ? instruction_EX[15:11] : instruction_EX[20:16];
+			lo_WB <= GPIO_in_en == 1'd0 ? lo_EX : gpio_in;  // ------------------------------------Will Be pArt of Mux for regfile writeback-------//
 		end
 	end
 	

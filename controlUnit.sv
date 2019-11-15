@@ -66,7 +66,7 @@ output logic GPIO_IN //en
 				alu_op = 4'b0100; // op_EX
 				shamt_EX = 5'bXXXXX;
 				enhilo_EX = 1'b0;
-				regsel_EX = 2'b00;
+				regsel_EX = 2'b00; // = to 2 for R, unless GPIO, or deal with hi and lo
 				regwrite_EX = 1'b1;
 				rdrt_EX = 1'b0;
 				memwrite_EX = 1'b0; 
@@ -234,8 +234,8 @@ output logic GPIO_IN //en
 				alu_op = 4'dX; 
 				shamt_EX = 5'dX;
 				enhilo_EX = 1'b0;
-				regsel_EX = 2'b01; // select register to read from (rd) (rd=01)
-				regwrite_EX = 1'b0;
+				regsel_EX = 2'b00; 
+				regwrite_EX = 1'b1;
 				rdrt_EX = 1'b0;
 				memwrite_EX = 1'b0; 
 				alu_src_EX = 2'd0;
@@ -338,7 +338,7 @@ output logic GPIO_IN //en
 				regsel_EX = 2'b00;	//only  for mflo mfhi gpio, else 0
 				regwrite_EX = 1'b1; //all besides mults
 				rdrt_EX = 1'b0;  //0 for R, 1 for I// handles immediate val
-				memwrite_EX = 1'b0; // used in I type- defualt 0
+				memwrite_EX = 1'b0; // not going to use anymore
 				alu_src_EX = 2'b00;  // used in I-type - default 0
 				GPIO_OUT = 1'b0;  //1 for srl
 				GPIO_IN = 1'b0;	 // 1 for sra			
@@ -349,18 +349,31 @@ output logic GPIO_IN //en
 			
 
 	//------------------------- I-TYPE -------------lui,adi,addiu,andi,ori,xori,slti----//
-		 
+		 	/*
+				
+				OUTPUT from ALU is captured as lo_ex and hi_ex
+					some of this logic is already written in the WB stage in cpu
+				regsel_EX logic: (from page 32 in slides)
+					if 0 take normal output from alu (lo_EX)
+					if 1 which is only for mfhi take (hi_EX)
+					if 2 which is only for mflo take (lo_EX)
+					
+				regsel_WB logic:
+					regsel_WB <= regsel_EX		-- fuck it, i think that he mixed the numbers up when he wrote the slides 41 and 32
 
+				I would implement regsel_EX = 3 for sra to read GPIO-in to regfile, but we are using GPIO_in_en already
+					//if 3 which is only for sra take (GPIO_in)
+			*/
 			// lui
 			end else if (i_type == 6'b001111) begin  // load immediate value into the upper half-word of register rt
 				alu_op = 4'b1000; // sll
 				shamt_EX = 5'd16; // ?? -> what should this be
-				enhilo_EX = 1'b0;
-				regsel_EX = 2'b00; //0 for I-types, unless LW
+				enhilo_EX = 1'b0; // only for mult
+				regsel_EX = 2'b00; // 0 for I-types indicating use lo register from alu as output, unless LW
 				regwrite_EX = 1'b1; //1 if writing to a reg
-				rdrt_EX = 1'b1;
-				memwrite_EX = 1'b1;
-				alu_src_EX = 2'b01; // 
+				rdrt_EX = 1'b1; // rt destination
+				memwrite_EX = 1'b1; // only 1 for lui to move bits to the highest 16 bits in dest register
+				alu_src_EX = 2'b00; // default
 				GPIO_OUT = 1'b0;
 				GPIO_IN = 1'b0;
 			// addi, addiu
@@ -368,11 +381,11 @@ output logic GPIO_IN //en
 				alu_op = 4'b0100;
 				shamt_EX = 5'bXXXXX; // can alsodo 5'dX				
 				enhilo_EX = 1'b0;
-				regsel_EX = 2'b00;
+				regsel_EX = 2'b00; //0 for I-types, unless LW
 				regwrite_EX = 1'b1;
-				rdrt_EX = 1'b1;
-				memwrite_EX = 1'b0;
-				alu_src_EX = 2'd1;
+				rdrt_EX = 1'b1; // rt destination
+				memwrite_EX = 1'b0; // don't need this anymore,  but we will keep it in
+				alu_src_EX = 2'd1; // sign extend
 				GPIO_OUT = 1'b0;
 				GPIO_IN = 1'b0;
 			// andi
@@ -380,11 +393,11 @@ output logic GPIO_IN //en
 				alu_op = 4'b0000;
 				shamt_EX = 5'bXXXXX;
 				enhilo_EX = 1'b0;
-				regsel_EX = 2'b00;
+				regsel_EX = 2'b00; //0 for I-types, unless LW
 				regwrite_EX = 1'b1;
-				rdrt_EX = 1'b1;
+				rdrt_EX = 1'b1; // rt destination
 				memwrite_EX = 1'b0;
-				alu_src_EX = 2'd1;
+				alu_src_EX = 2'd2; // zero extend
 				GPIO_OUT = 1'b0;
 				GPIO_IN = 1'b0;
 
@@ -393,12 +406,11 @@ output logic GPIO_IN //en
 				alu_op = 4'b0001;
 				shamt_EX = 5'bXXXXX;
 				enhilo_EX = 1'b0;
-				regsel_EX = 2'b00;
-				alu_op = 4'b0001;
+				regsel_EX = 2'b00; //0 for I-types, unless LW
 				regwrite_EX = 1'b1;
-				rdrt_EX = 1'b1;
+				rdrt_EX = 1'b1; // rt destination
 				memwrite_EX = 1'b0;
-				alu_src_EX = 2'b10;
+				alu_src_EX = 2'd2; // zero extend
 				GPIO_OUT = 1'b0;
 				GPIO_IN = 1'b0;
 			// xori
@@ -406,11 +418,11 @@ output logic GPIO_IN //en
 				alu_op = 4'b0011;
 				shamt_EX = 5'bXXXXX;
 				enhilo_EX = 1'b0;
-				regsel_EX = 2'b00;
+				regsel_EX = 2'b00; //0 for I-types, unless LW
 				regwrite_EX = 1'b1;
-				rdrt_EX = 1'b1;
+				rdrt_EX = 1'b1; // rt destination
 				memwrite_EX = 1'b0;
-				alu_src_EX = 2'd1;
+				alu_src_EX = 2'd2;  // zero extend
 				GPIO_OUT = 1'b0;
 				GPIO_IN = 1'b0;	
 			// slti
@@ -418,11 +430,11 @@ output logic GPIO_IN //en
 				alu_op = 4'b1100;
 				shamt_EX = 5'bXXXXX;
 				enhilo_EX = 1'b0;
-				regsel_EX = 2'b00;
+				regsel_EX = 2'b00; //0 for I-types, unless LW
 				regwrite_EX = 1'b1;
-				rdrt_EX = 1'b1;
+				rdrt_EX = 1'b1; // rt destination
 				memwrite_EX = 1'b0;
-				alu_src_EX = 2'd1;
+				alu_src_EX = 2'd1;  // sign extend
 				GPIO_OUT = 1'b0;
 				GPIO_IN = 1'b0;
 			// bne

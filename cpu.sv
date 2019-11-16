@@ -67,9 +67,11 @@ module cpu (
 		$readmemh("instmem.dat", instruction_memory); // rename to instmem.dat later
 	end
 
-	// ALU mux 
+	// ALU MUX 
 	assign B_EX = alu_src_EX == 2'b0 ? readdata2_EX : alu_src_EX == 2'b1 ? {{16{instruction_EX[15]}},instruction_EX[15:0]} : {16'b0,instruction_EX[15:0]};
 
+	// MUX that writes to Regfile
+	assign regdatain_WB <= GPIO_in_en == 1'd1 ? gpio_in : regsel_WB == 1'd0 ? lo_EX : regsel_WB == 1'd1 ? hi_EX : lo_EX;
 	
 	always_ff @(posedge clk,posedge rst) begin
 		if (rst) stall_EX <= 1'b0; else stall_EX <= stall_FETCH;
@@ -88,7 +90,7 @@ module cpu (
 		end
 	end
 
-	/*PC_FETCH + 12'b1;  // for jump and branch->*/
+	
 	
 // Pipeline Registers or Writeback Stage-----------------------------------------------------------------------------
 	always_ff @(posedge clk,posedge rst) begin
@@ -98,10 +100,10 @@ module cpu (
 		if (rst) begin
 			regwrite_WB <= 1'b0;
 		end else begin
-			// if(regsel_EX) // -> Finish logic for regsel_EX to regsel_WB, maybe?
 			regwrite_WB <= regwrite_EX;
+			regsel_WB <= regsel_EX;
 			writeaddr_WB <= rdrt_EX == 1'b0 ? instruction_EX[15:11] : instruction_EX[20:16];
-			lo_WB <= GPIO_in_en == 1'b0 ? lo_EX : gpio_in;  // ------------------------------------Will Be pArt of Mux for regfile writeback-------//
+			// lo_WB <= GPIO_in_en == 1'b0 ? lo_EX : gpio_in;  /
 		end
 	end
 	
@@ -129,15 +131,15 @@ pg 37
 						// writeback
 						.we(regwrite_WB),
 						.writeaddr(writeaddr_WB),
-						.writedata(lo_WB));
+						.writedata(regdatain_WB));
 	
 	// ALU (execute stage)
 	alu myalu (.a(A_EX),
 		   		.b(B_EX),
 		   		.shamt(shamt_EX),
 		   		.op(op_EX),
-		   		.lo(lo_EX),
 		   		.hi(hi_EX),
+		   		.lo(lo_EX),
 		   		.zero(zero_EX));
 
 

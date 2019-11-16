@@ -57,9 +57,6 @@ module cpu (
 
 	// Enable hi or lo
 	logic enhilo_EX;
-
-	// Ouput from MUX of ALU & CU
-	logic [31:0] regdatain_WB;
 	
 
 		// Load MIPS program // TODO // Create actual .dat file for MIPS code //--------------------------------------//
@@ -71,7 +68,7 @@ module cpu (
 	assign B_EX = alu_src_EX == 2'b0 ? readdata2_EX : alu_src_EX == 2'b1 ? {{16{instruction_EX[15]}},instruction_EX[15:0]} : {16'b0,instruction_EX[15:0]};
 
 	// MUX that writes to Regfile
-	assign regdatain_WB <= GPIO_in_en == 1'd1 ? gpio_in : regsel_WB == 1'd0 ? lo_EX : regsel_WB == 1'd1 ? hi_EX : lo_EX;
+	assign lo_WB <= GPIO_in_en == 1'd1 ? gpio_in : regsel_WB == 1'd0 ? lo_EX : regsel_WB == 1'd1 ? hi_EX : lo_EX;
 	
 	// lo_WB <= GPIO_in_en == 1'b0 ? lo_EX : gpio_in;  // lo_WB and regdatain_WB are synonamous 
 
@@ -133,7 +130,7 @@ pg 37
 						// writeback
 						.we(regwrite_WB),
 						.writeaddr(writeaddr_WB),
-						.writedata(regdatain_WB)); // lo_WB was being passed in
+						.writedata(lo_WB)); 
 	
 	// ALU (execute stage)
 	alu myalu (.a(A_EX),

@@ -98,9 +98,7 @@ module cpu (
 	
 	// Pipeline Registers or Writeback Stage-----------------------------------------------------------------------------
 	always_ff @(posedge clk,posedge rst) begin
-
-		// Develop this logic for the mux ?
-
+		
 		if (rst) begin
 			regwrite_WB <= 1'b0;
 		end else begin

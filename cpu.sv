@@ -67,7 +67,7 @@ module cpu (
 	// ALU MUX 
 	assign B_EX = alu_src_EX == 2'b0 ? readdata2_EX : alu_src_EX == 2'b1 ? {{16{instruction_EX[15]}},instruction_EX[15:0]} : {16'b0,instruction_EX[15:0]};
 
-	// MUX that writes to Regfile
+	// REG MUX that writes to Regfile
 	assign lo_WB <= GPIO_in_en == 1'd1 ? gpio_in : regsel_WB == 1'd0 ? lo_EX : regsel_WB == 1'd1 ? hi_EX : lo_EX;
 	
 	// lo_EX is the output from the ALU when enhilo == 0 and GPIO_in_en == 0
@@ -134,7 +134,7 @@ pg 37
 						// writeback
 						.we(regwrite_WB),
 						.writeaddr(writeaddr_WB),
-						.writedata(lo_WB)); 
+						.writedata(lo_WB));                // lo_WB is the output of REG MUX that we write to the regfile 
 	
 	// ALU (execute stage)
 	alu myalu (.a(A_EX),

@@ -47,7 +47,6 @@ module cpu (
 	logic [1:0] pc_src_EX;
 	logic stall_FETCH,stall_EX;
 
-
 	// GPIO control from Control Unit
 	logic GPIO_out_en;
 	logic GPIO_in_en;
@@ -55,7 +54,7 @@ module cpu (
 	// Control Unit signal 
 	logic [1:0] regsel_EX;
 
-	// Enable hi or lo
+	// Enable hi & lo
 	logic enhilo_EX;
 	
 
@@ -69,13 +68,13 @@ module cpu (
 
 	// REG MUX that writes to Regfile
 	// Takes into account GPIO, enhilo_EX, and regsel_EX to determine output
-	assign lo_WB = GPIO_in_en == 1'd1 ? gpio_in : enhilo_EX == 1'd1 ? {hi_EX, lo_EX} : regsel_WB == 1'd0 ? lo_EX : regsel_WB == 1'd1 ? hi_EX : lo_EX;
+	assign lo_WB = GPIO_in_en == 1'd1 ? gpio_in : enhilo_EX == 1'd1 ? {hi_EX, lo_EX} : regsel_WB == 2'b00 ? lo_EX : regsel_WB == 2'b01 ? hi_EX : lo_EX;
 	
+
 	// lo_EX is the output from the ALU when enhilo == 0 and GPIO_in_en == 0
 	// lo_WB <= GPIO_in_en == 1'b0 ? lo_EX : gpio_in;  // Not needed
 	// lo_WB and regdatain_WB are synonamous 
 	// I removed regdatain_WB because it was unnecessary 
-
 
 
 	always_ff @(posedge clk,posedge rst) begin

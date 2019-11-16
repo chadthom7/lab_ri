@@ -64,7 +64,7 @@ module cpu (
 		$readmemh("instmem.dat", instruction_memory); // rename to instmem.dat later
 	end
 
-	// ALU MUX 
+	// ALU MUX for input B 
 	assign B_EX = alu_src_EX == 2'b0 ? readdata2_EX : alu_src_EX == 2'b1 ? {{16{instruction_EX[15]}},instruction_EX[15:0]} : {16'b0,instruction_EX[15:0]};
 
 	// REG MUX that writes to Regfile

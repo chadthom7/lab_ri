@@ -70,7 +70,11 @@ module cpu (
 	// MUX that writes to Regfile
 	assign lo_WB <= GPIO_in_en == 1'd1 ? gpio_in : regsel_WB == 1'd0 ? lo_EX : regsel_WB == 1'd1 ? hi_EX : lo_EX;
 	
-	// lo_WB <= GPIO_in_en == 1'b0 ? lo_EX : gpio_in;  // lo_WB and regdatain_WB are synonamous 
+	// lo_EX is the output from the ALU when enhilo == 0 and GPIO_in_en == 0
+	// lo_WB <= GPIO_in_en == 1'b0 ? lo_EX : gpio_in;  
+	// lo_WB and regdatain_WB are synonamous 
+	// I removed regdatain_WB because it was unnecessary 
+
 
 
 	always_ff @(posedge clk,posedge rst) begin

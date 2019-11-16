@@ -72,7 +72,7 @@ module cpu (
 	assign lo_WB = GPIO_in_en == 1'd1 ? gpio_in : enhilo_EX == 1'd1 ? {hi_EX, lo_EX} : regsel_WB == 1'd0 ? lo_EX : regsel_WB == 1'd1 ? hi_EX : lo_EX;
 	
 	// lo_EX is the output from the ALU when enhilo == 0 and GPIO_in_en == 0
-	// lo_WB <= GPIO_in_en == 1'b0 ? lo_EX : gpio_in;  
+	// lo_WB <= GPIO_in_en == 1'b0 ? lo_EX : gpio_in;  // Not needed
 	// lo_WB and regdatain_WB are synonamous 
 	// I removed regdatain_WB because it was unnecessary 
 
@@ -83,7 +83,7 @@ module cpu (
 	end
 	
 	
-// FETCH stage----------------------------------------------------------------------------------
+	// FETCH stage----------------------------------------------------------------------------------
 	always_ff @(posedge clk, posedge rst) begin
 
 		if (rst) begin
@@ -97,7 +97,7 @@ module cpu (
 
 	
 	
-// Pipeline Registers or Writeback Stage-----------------------------------------------------------------------------
+	// Pipeline Registers or Writeback Stage-----------------------------------------------------------------------------
 	always_ff @(posedge clk,posedge rst) begin
 
 		// Develop this logic for the mux ?
@@ -111,18 +111,19 @@ module cpu (
 		end
 	end
 	
-
+	// GPIO_out logic
 	always_ff @(posedge clk, posedge rst) begin
 		if (rst) gpio_out <= 32'b0; else
 			if (GPIO_out_en) gpio_out <= readdata2_EX;
 	end	
 
 
-/*regdata_WB = 
-if statement using (regsel_WB,[r_WB,hi_WB,lo_WB,GPIO_in], and regwrite_WB, and regdest_WB)
-pg 37
+	/*regdata_WB = 
+	if statement using (regsel_WB,[r_WB,hi_WB,lo_WB,GPIO_in], and regwrite_WB, and regdest_WB)
+	pg 37
 
-*/	
+	*/	
+
 	// Register
 	regfile myregfile (.clk(clk),
 						.rst(rst),

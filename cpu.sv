@@ -68,7 +68,7 @@ module cpu (
 
 	// REG MUX that writes to Regfile
 	// Takes into account GPIO, enhilo_EX, and regsel_EX to determine output
-	assign lo_WB = GPIO_in_en == 1'd1 ? gpio_in : enhilo_EX == 1'd1 ? {hi_EX, lo_EX} : regsel_WB == 2'b00 ? lo_EX : regsel_WB == 2'b01 ? hi_EX : lo_EX;
+	assign lo_WB = GPIO_in_en == 1'b1 ? gpio_in : enhilo_EX == 1'b1 ? {hi_EX, lo_EX} : regsel_WB == 2'b00 ? lo_EX : regsel_WB == 2'b01 ? hi_EX : lo_EX;
 	
 
 	// lo_EX is the output from the ALU when enhilo == 0 and GPIO_in_en == 0

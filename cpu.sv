@@ -73,6 +73,9 @@ module cpu (
 	// MUX that writes to Regfile
 	assign regdatain_WB <= GPIO_in_en == 1'd1 ? gpio_in : regsel_WB == 1'd0 ? lo_EX : regsel_WB == 1'd1 ? hi_EX : lo_EX;
 	
+	// lo_WB <= GPIO_in_en == 1'b0 ? lo_EX : gpio_in;  // lo_WB and regdatain_WB are synonamous 
+
+
 	always_ff @(posedge clk,posedge rst) begin
 		if (rst) stall_EX <= 1'b0; else stall_EX <= stall_FETCH;
 	end
@@ -103,7 +106,6 @@ module cpu (
 			regwrite_WB <= regwrite_EX;
 			regsel_WB <= regsel_EX;
 			writeaddr_WB <= rdrt_EX == 1'b0 ? instruction_EX[15:11] : instruction_EX[20:16];
-			// lo_WB <= GPIO_in_en == 1'b0 ? lo_EX : gpio_in;  /
 		end
 	end
 	
@@ -131,7 +133,7 @@ pg 37
 						// writeback
 						.we(regwrite_WB),
 						.writeaddr(writeaddr_WB),
-						.writedata(regdatain_WB));
+						.writedata(regdatain_WB)); // lo_WB was being passed in
 	
 	// ALU (execute stage)
 	alu myalu (.a(A_EX),

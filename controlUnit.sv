@@ -360,7 +360,7 @@ output logic GPIO_IN //en
 					if 2 which is only for mflo take (lo_EX)
 					
 				regsel_WB logic:
-					regsel_WB <= regsel_EX		-- fuck it, i think that he mixed the numbers up when he wrote the slides 41 and 32
+					regsel_WB <= regsel_EX		// This is right
 
 				I would implement regsel_EX = 3 for sra to read GPIO-in to regfile, but we are using GPIO_in_en already
 					//if 3 which is only for sra take (GPIO_in)

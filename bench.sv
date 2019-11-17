@@ -25,6 +25,7 @@ module bench;
 //____________________________________________________________
 	// Clk and rst are normal input, clk2 is used to download vector and check results 
 	reg clk, clk2, rst;
+	logic [3:0] hex_rst;
 //_____________________________________________________________
 	// TESTBENCH DATA
 	logic [64:0] vectors [149:0]; // 150 65 bit test vectors
@@ -54,14 +55,15 @@ module bench;
 	end
 
 	initial begin
-		$readmemb("vectors.dat", vectors); // read as bits
+		$readmemh("vector.dat", vectors); // read as bits
 		vectornum = 32'b0; 
 		error = 32'b0;
-		rst = 1'b1; #27; rst = 1'b0;		
+		//rst = 1'b1; #27; rst = 1'b0;		
 	end
 
 	always @(posedge clk2) begin
-		{rst, GPIO_in, GPIO_out_e} = vectors[vectornum]; 
+		{hex_rst, GPIO_in, GPIO_out_e} = vectors[vectornum]; 
+		rst = hex_rst == 4'b0000 ? 1'b0 : 1'b1; //reset is read as 4 bits cuz vectors are in hexadecimal
 		vectornum = vectornum + 1;
 	end	
 

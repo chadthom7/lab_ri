@@ -4,7 +4,9 @@ input clk, rst,
 
 input logic [5:0] i_type,
 
-input logic [4:0] shamt /* <-instruction_EX[10:6] */ , function_code /* <-instruction_EX[5:0] */ , 
+input logic [4:0] shamt /* <-instruction_EX[10:6] */ , 
+
+input logic [5:0] function_code /* <-instruction_EX[5:0] 6 bits not 5*/ ,
 
 output logic [3:0] alu_op, // op_EX
 
@@ -32,7 +34,8 @@ output logic [1:0] alu_src_EX,
 
 output logic GPIO_OUT, //en
 
-output logic GPIO_IN //en
+output logic GPIO_IN,
+input logic stall_FETCH //en
 
 );
 
@@ -447,7 +450,7 @@ output logic GPIO_IN //en
 					pc_src_EX = 2'b1;
 				end
 			*/			
-			
+			end
 		end
 			
 	end

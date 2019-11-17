@@ -45,14 +45,14 @@ module cpu (
 
 	// PC control for Jump and Branch Instructions 
 	logic [1:0] pc_src_EX;
-	logic stall_FETCH,stall_EX;
+	logic stall_FETCH, stall_EX;
 
 	// GPIO control from Control Unit
 	logic GPIO_out_en;
 	logic GPIO_in_en;
 	
 	// Control Unit signal 
-	logic [1:0] regsel_EX;
+	logic [1:0] regsel_EX, regsel_WB;
 
 	// Enable hi & lo
 	logic enhilo_EX;
@@ -138,7 +138,7 @@ module cpu (
 	// ALU (execute stage)
 	alu myalu (.a(A_EX),
 		   		.b(B_EX),
-		   		.shamt(shamt_EX),
+		   		.shamt({3'b000,shamt_EX}), //needs to be 8 bits
 		   		.op(op_EX),
 		   		.hi(hi_EX),
 		   		.lo(lo_EX),
@@ -161,7 +161,8 @@ module cpu (
 					.memwrite_EX(memwrite_EX),
 					.alu_src_EX(alu_src_EX),
 					.GPIO_OUT(GPIO_out_en),
-					.GPIO_IN(GPIO_in_en));
+					.GPIO_IN(GPIO_in_en),
+					.stall_FETCH(stall_EX));
 
 		
 

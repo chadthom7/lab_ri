@@ -105,12 +105,9 @@ module cpu (
 
 	// 
 	always_ff @(posedge clk, posedge rst) begin
-		if(~enhilo_EX) begin
-			HI_WB_REG <= hi_EX;
-			LO_WB_REG <= lo_EX;
-			R_WB_REG <= lo_EX;
-		end
-		
+		HI_WB_REG <= hi_EX;
+		LO_WB_REG <= lo_EX;
+		R_WB_REG <= lo_EX;		
 	end	
 
 

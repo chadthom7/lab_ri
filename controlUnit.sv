@@ -466,6 +466,17 @@ input logic stall_FETCH //en
 				GPIO_OUT = 1'b0;
 				GPIO_IN = 1'b0;
 			end		
+		end else
+			alu_op = 4'bXXXX;
+			shamt_EX = 5'bXXXXX;
+			enhilo_EX = 1'bX;
+			regsel_EX = 2'bXX; //0 for I-types, unless LW
+			regwrite_EX = 1'bX;
+			rdrt_EX = 1'bX; // rt destination
+			memwrite_EX = 1'bX;
+			alu_src_EX = 2'dX;  // sign extend
+			GPIO_OUT = 1'bX;
+			GPIO_IN = 1'bX;
 		end
 			
 	end

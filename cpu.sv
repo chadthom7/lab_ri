@@ -32,7 +32,7 @@ module cpu (
 	// Writeback signals
 	logic regwrite_WB, regwrite_EX;
 	logic [4:0] writeaddr_WB;
-	logic [31:0] regdata_WB, r_WB,lo_WB, hi_WB;
+	logic [31:0] regdata_WB, r_WB, lo_WB, hi_WB;
 
 	// Regfile signals
 	logic [31:0] readdata2_EX;
@@ -107,7 +107,7 @@ module cpu (
 	always_ff @(posedge clk, posedge rst) begin
 		HI_WB_REG <= hi_EX;
 		LO_WB_REG <= lo_EX;
-		R_WB_REG <= lo_EX;		
+		//R_WB_REG <= lo_EX;		
 	end	
 
 

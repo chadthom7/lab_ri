@@ -89,7 +89,7 @@ module cpu (
 	// REG MUX that writes to Regfile
 	// Takes into account GPIO, enhilo_EX, and regsel_EX to determine output
 	assign r_WB = lo_EX;
-	always @(*) begin
+	always_ff @(posedge clk, posedge rst) begin // always @(*) begin
 		if (enhilo_EX == 1'b1) begin
 			lo_WB = lo_EX; 
 			hi_WB = hi_EX; 
@@ -142,10 +142,10 @@ module cpu (
 			regwrite_WB <= regwrite_EX;
 			regsel_WB <= regsel_EX;
 			writeaddr_WB <= rdrt_EX == 1'b0 ? instruction_EX[15:11] : instruction_EX[20:16]; // 0 =rd, 1 = rt
-			if (GPIO_in_en == 1'b1) regdata_WB = gpio_in;
-			else if (regsel_WB == 2'b00) regdata_WB = r_WB;
-			else if (regsel_WB == 2'b01) regdata_WB = hi_WB;
-			else if (regsel_WB == 2'b10) regdata_WB = lo_WB;
+			if (GPIO_in_en == 1'b1) regdata_WB <= gpio_in;
+			else if (regsel_WB == 2'b00) regdata_WB <= r_WB;
+			else if (regsel_WB == 2'b01) regdata_WB <= hi_WB;
+			else if (regsel_WB == 2'b10) regdata_WB <= lo_WB;
 		end
 	end
 	

@@ -49,3 +49,11 @@ Need to add:
 Pipelining:
 FEW, each can work on a different instruction
 each instruction must have it's F,E,and W done in different cycles starting with F->E->W
+
+
+
+
+Based on the output of controlUnit. A_EX and B_EX need to be designated and used as input for the ALU.
+ - currently the wires are red for anything using these as inpput or output
+
+

@@ -64,8 +64,8 @@ input logic stall_FETCH //en
 		if (~stall_FETCH) begin
 
 			// ADD
-			if (i_type == 6'd0 && function_code == 6'b100000 |
-				function_code == 6'b100001) begin
+			if (i_type == 6'd0 && (function_code == 6'b100000 |
+				function_code == 6'b100001)) begin
 				alu_op = 4'b0100; // op_EX
 				shamt_EX = 5'bXXXXX;
 				enhilo_EX = 1'b0;
@@ -216,7 +216,7 @@ input logic stall_FETCH //en
 
 
 			// SRA 
-			end else if (i_type == 6'd0 && function_code == 6'b000011&&
+			end else if (i_type == 6'd0 && function_code == 6'b000011 &&
 					shamt != 5'd0) begin 
 				alu_op = 4'b1010;
 				shamt_EX = shamt;

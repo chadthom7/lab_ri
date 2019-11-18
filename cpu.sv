@@ -32,7 +32,7 @@ module cpu (
 	// Writeback signals
 	logic regwrite_WB, regwrite_EX;
 	logic [4:0] writeaddr_WB;
-	logic [31:0] lo_WB;
+	logic [31:0] regdata_WB, r_WB,lo_WB, hi_WB;
 
 	// Regfile signals
 	logic [31:0] readdata2_EX;
@@ -79,9 +79,15 @@ module cpu (
 
 	// REG MUX that writes to Regfile
 	// Takes into account GPIO, enhilo_EX, and regsel_EX to determine output
-	assign lo_WB = GPIO_in_en == 1'b1 ? gpio_in : enhilo_EX == 1'b1 ? {hi_EX, lo_EX} : regsel_WB == 2'b00 ? lo_EX : regsel_WB == 2'b01 ? hi_EX : lo_EX;
-	
+	assign r_WB = lo_EX;
+	always @(*) begin
+		if (enhilo_EX == 1'b1) begin
+			lo_WB = lo_EX; 
+			hi_WB = hi_EX; 
+		end
+	end
 
+	//assign regdata_WB = GPIO_in_en == 1'b1 ? gpio_in : regsel_WB == 2'b00 ? lo_EX : regsel_WB == 2'b01 ? hi_EX : lo_EX;
 	// lo_EX is the output from the ALU when enhilo == 0 and GPIO_in_en == 0
 	// lo_WB <= GPIO_in_en == 1'b0 ? lo_EX : gpio_in;  // Not needed
 	// lo_WB and regdatain_WB are synonamous 
@@ -118,6 +124,10 @@ module cpu (
 			regwrite_WB <= regwrite_EX;
 			regsel_WB <= regsel_EX;
 			writeaddr_WB <= rdrt_EX == 1'b0 ? instruction_EX[15:11] : instruction_EX[20:16]; // 0 =rd, 1 = rt
+			if (GPIO_in_en == 1'b1) regdata_WB = gpio_in;
+			else if (regsel_WB == 2'b00) regdata_WB = r_WB;
+			else if (regsel_WB == 2'b01) regdata_WB = hi_WB;
+			else if (regsel_WB == 2'b10) regdata_WB = lo_WB;
 		end
 	end
 	
@@ -146,7 +156,7 @@ module cpu (
 						// writeback
 						.we(regwrite_WB),
 						.writeaddr(writeaddr_WB),
-						.writedata(lo_WB));                // lo_WB is the output of REG MUX that we write to the regfile 
+						.writedata(regdata_WB));                // lo_WB is the output of REG MUX that we write to the regfile 
 	
 	// ALU (execute stage)
 	alu myalu (.a(A_EX),

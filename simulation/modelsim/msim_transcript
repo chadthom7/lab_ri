@@ -1,0 +1,169 @@
+# Reading C:/Users/Tomahawk/quartus/intelFPGA/18.1/modelsim_ase/tcl/vsim/pref.tcl
+# do CSCE611_lab_ri_run_msim_rtl_verilog.do
+# if {[file exists rtl_work]} {
+# 	vdel -lib rtl_work -all
+# }
+# vlib rtl_work
+# vmap work rtl_work
+# Model Technology ModelSim - Intel FPGA Edition vmap 10.5b Lib Mapping Utility 2016.10 Oct  5 2016
+# vmap work rtl_work 
+# Copying C:/Users/Tomahawk/quartus/intelFPGA/18.1/modelsim_ase/win32aloem/../modelsim.ini to modelsim.ini
+# Modifying modelsim.ini
+# 
+# vlog -sv -work work +incdir+C:/Users/Tomahawk/Source/Repos/lab_ri {C:/Users/Tomahawk/Source/Repos/lab_ri/csce611_lab_ri.sv}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 17:50:38 on Nov 18,2019
+# vlog -reportprogress 300 -sv -work work "+incdir+C:/Users/Tomahawk/Source/Repos/lab_ri" C:/Users/Tomahawk/Source/Repos/lab_ri/csce611_lab_ri.sv 
+# -- Compiling module CSCE611_lab_ri
+# 
+# Top level modules:
+# 	CSCE611_lab_ri
+# End time: 17:50:38 on Nov 18,2019, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -sv -work work +incdir+C:/Users/Tomahawk/Source/Repos/lab_ri {C:/Users/Tomahawk/Source/Repos/lab_ri/hexdriver.sv}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 17:50:38 on Nov 18,2019
+# vlog -reportprogress 300 -sv -work work "+incdir+C:/Users/Tomahawk/Source/Repos/lab_ri" C:/Users/Tomahawk/Source/Repos/lab_ri/hexdriver.sv 
+# -- Compiling module hexdriver
+# 
+# Top level modules:
+# 	hexdriver
+# End time: 17:50:38 on Nov 18,2019, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# 
+do CSCE611_lab_ri_run_msim_rtl_verilog.do
+# if {[file exists rtl_work]} {
+# 	vdel -lib rtl_work -all
+# }
+# vlib rtl_work
+# vmap work rtl_work
+# Model Technology ModelSim - Intel FPGA Edition vmap 10.5b Lib Mapping Utility 2016.10 Oct  5 2016
+# vmap work rtl_work 
+# Modifying modelsim.ini
+# 
+# vlog -sv -work work +incdir+C:/Users/Tomahawk/Source/Repos/lab_ri {C:/Users/Tomahawk/Source/Repos/lab_ri/csce611_lab_ri.sv}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 17:51:03 on Nov 18,2019
+# vlog -reportprogress 300 -sv -work work "+incdir+C:/Users/Tomahawk/Source/Repos/lab_ri" C:/Users/Tomahawk/Source/Repos/lab_ri/csce611_lab_ri.sv 
+# -- Compiling module CSCE611_lab_ri
+# 
+# Top level modules:
+# 	CSCE611_lab_ri
+# End time: 17:51:03 on Nov 18,2019, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -sv -work work +incdir+C:/Users/Tomahawk/Source/Repos/lab_ri {C:/Users/Tomahawk/Source/Repos/lab_ri/hexdriver.sv}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 17:51:03 on Nov 18,2019
+# vlog -reportprogress 300 -sv -work work "+incdir+C:/Users/Tomahawk/Source/Repos/lab_ri" C:/Users/Tomahawk/Source/Repos/lab_ri/hexdriver.sv 
+# -- Compiling module hexdriver
+# 
+# Top level modules:
+# 	hexdriver
+# End time: 17:51:03 on Nov 18,2019, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# 
+do scripts/test.tcl
+# Cannot open macro file: scripts/test.tcl
+do C:/Users/Tomahawk/Source
+# Cannot open macro file: C:/Users/Tomahawk/Source
+do C:/Users/Tomahawk/Source/Repos/lab_ri/scripts/test.tcl
+# ==== CSCE611 RI Lab Test Script ===============================================
+# 
+# TIP: you can run this test again without re-starting modelsim using the command
+# do scripts/test.tcl
+# 
+# ------ Compile Verilog Files --------------------------------------------------
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 17:55:19 on Nov 18,2019
+# vlog -reportprogress 300 -novopt *.sv 
+# ** Error: (vlog-7) Failed to open design unit file "*.sv" in read mode.
+# No such file or directory. (errno = ENOENT)
+# End time: 17:55:19 on Nov 18,2019, Elapsed time: 0:00:00
+# Errors: 1, Warnings: 0
+# ** Error: C:/Users/Tomahawk/quartus/intelFPGA/18.1/modelsim_ase/win32aloem/vlog failed.
+# Error in macro C:\Users\Tomahawk\Source\Repos\lab_ri\scripts\test.tcl line 8
+# C:/Users/Tomahawk/quartus/intelFPGA/18.1/modelsim_ase/win32aloem/vlog failed.
+#     while executing
+# "vlog -novopt *.sv"
+do C:/Users/Tomahawk/Source/Repos/lab_ri/scripts/test.tcl
+# ==== CSCE611 RI Lab Test Script ===============================================
+# 
+# TIP: you can run this test again without re-starting modelsim using the command
+# do scripts/test.tcl
+# 
+# ------ Compile Verilog Files --------------------------------------------------
+# ------ Load Design ------------------------------------------------------------
+# vsim -novopt work.bench 
+# Start time: 17:56:34 on Nov 18,2019
+# ** Error: (vsim-3170) Could not find 'bench'.
+#         Searched libraries:
+#             C:/Users/Tomahawk/Source/Repos/lab_ri/simulation/modelsim/rtl_work
+# Error loading design
+# Error: Error loading design
+#        Pausing macro execution
+# MACRO C:\Users\Tomahawk\Source\Repos\lab_ri\scripts\test.tcl PAUSED at line 10
+do C:/Users/Tomahawk/Source/Repos/lab_ri/scripts/test.tcl
+# ==== CSCE611 RI Lab Test Script ===============================================
+# 
+# TIP: you can run this test again without re-starting modelsim using the command
+# do scripts/test.tcl
+# 
+# ------ Compile Verilog Files --------------------------------------------------
+# ------ Load Design ------------------------------------------------------------
+# ------ Setup Waves ------------------------------------------------------------
+# ------ Simulate ---------------------------------------------------------------
+# ** Error: No Design Loaded!
+# Error in macro C:\Users\Tomahawk\Source\Repos\lab_ri\scripts\test.tcl line 14
+# No Design Loaded!
+#     while executing
+# "run 5000"
+do C:/Users/Tomahawk/Source/Repos/lab_ri/scripts/test.tcl
+# ==== CSCE611 RI Lab Test Script ===============================================
+# 
+# TIP: you can run this test again without re-starting modelsim using the command
+# do scripts/test.tcl
+# 
+# ------ Compile Verilog Files --------------------------------------------------
+# ------ Load Design ------------------------------------------------------------
+# ------ Setup Waves ------------------------------------------------------------
+# ------ Simulate ---------------------------------------------------------------
+# ** Error: No Design Loaded!
+# Error in macro C:\Users\Tomahawk\Source\Repos\lab_ri\scripts\test.tcl line 14
+# No Design Loaded!
+#     while executing
+# "run 5000"
+do C:/Users/Tomahawk/Source/Repos/lab_ri/scripts/test.tcl
+# ==== CSCE611 RI Lab Test Script ===============================================
+# 
+# TIP: you can run this test again without re-starting modelsim using the command
+# do scripts/test.tcl
+# 
+# ------ Compile Verilog Files --------------------------------------------------
+# ------ Load Design ------------------------------------------------------------
+# ------ Setup Waves ------------------------------------------------------------
+# ------ Simulate ---------------------------------------------------------------
+# ** Error: No Design Loaded!
+# Error in macro C:\Users\Tomahawk\Source\Repos\lab_ri\scripts\test.tcl line 14
+# No Design Loaded!
+#     while executing
+# "run 5000"
+vsim system_conf
+# vsim system_conf 
+# Start time: 17:56:34 on Nov 18,2019
+# ** Error: (vsim-3170) Could not find 'system_conf'.
+#         Searched libraries:
+#             C:/Users/Tomahawk/Source/Repos/lab_ri/simulation/modelsim/rtl_work
+# Error loading design
+# Error: Error loading design
+#        Pausing macro execution
+# MACRO C:\Users\Tomahawk\Source\Repos\lab_ri\scripts\test.tcl PAUSED at line 10
+vsim system
+# vsim system 
+# Start time: 17:56:34 on Nov 18,2019
+# ** Error: (vsim-3170) Could not find 'system'.
+#         Searched libraries:
+#             C:/Users/Tomahawk/Source/Repos/lab_ri/simulation/modelsim/rtl_work
+# Error loading design
+# Error: Error loading design
+#        Pausing macro execution
+# MACRO C:\Users\Tomahawk\Source\Repos\lab_ri\scripts\test.tcl PAUSED at line 10

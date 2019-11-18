@@ -45,7 +45,9 @@ input logic stall_FETCH //en
 // regsel_EX 		// 1 for mfhi, 2 for mflo, 0 for everything else
 
 // Control Unit Logic
-	always_comb begin//always @(*) begin
+
+	//always_ff @(posedge clk, posedge rst) begin
+	always_comb begin      //always @(*) begin
 		// alu_op = 4'b0000; // '0000' is op code for AND
 		// regsel_EX = 2'b00;
 		// regwrite_EX = 1'b0;			   // don't write a register
@@ -441,6 +443,7 @@ input logic stall_FETCH //en
 				alu_src_EX = 2'd1;  // sign extend
 				GPIO_OUT = 1'b0;
 				GPIO_IN = 1'b0;
+			
 			// bne
 			/*
 			end else if (i_type == 6'b000101) begin
@@ -450,7 +453,19 @@ input logic stall_FETCH //en
 					pc_src_EX = 2'b1;
 				end
 			*/			
-			end
+			
+			end else if (rst != 1'b0) begin // if reset = true
+				alu_op = 4'bXXXX;
+				shamt_EX = 5'bXXXXX;
+				enhilo_EX = 1'b0;
+				regsel_EX = 2'b00; //0 for I-types, unless LW
+				regwrite_EX = 1'b0;
+				rdrt_EX = 1'b0; // rt destination
+				memwrite_EX = 1'b0;
+				alu_src_EX = 2'd0;  // sign extend
+				GPIO_OUT = 1'b0;
+				GPIO_IN = 1'b0;
+			end		
 		end
 			
 	end

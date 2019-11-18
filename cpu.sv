@@ -90,6 +90,8 @@ module cpu (
 
 	always_ff @(posedge clk,posedge rst) begin
 		if (rst) stall_EX <= 1'b0; else stall_EX <= stall_FETCH;
+
+		//if(stall_EX
 	end
 	
 	
@@ -115,7 +117,7 @@ module cpu (
 		end else begin
 			regwrite_WB <= regwrite_EX;
 			regsel_WB <= regsel_EX;
-			writeaddr_WB <= rdrt_EX == 1'b0 ? instruction_EX[15:11] : instruction_EX[20:16];
+			writeaddr_WB <= rdrt_EX == 1'b0 ? instruction_EX[15:11] : instruction_EX[20:16]; // 0 =rd, 1 = rt
 		end
 	end
 	
@@ -135,7 +137,7 @@ module cpu (
 	// Register
 	regfile myregfile (.clk(clk),
 						.rst(rst),
-						// execute (decode)
+						// execute (decode) //maybe RS shouldn't be set here if lui,mflo,mfhi is happening
 						.readaddr1(instruction_EX[25:21]), // RS address
 						.readaddr2(instruction_EX[20:16]), // RT address
 						.readdata1(A_EX),

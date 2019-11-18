@@ -1,0 +1,61 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/Tomahawk/Source/Repos/lab_ri/simulation/modelsim
+vCSCE611_lab_ri
+Z1 DXx6 sv_std 3 std 0 22 AD7iAPLo6nTIKk<N0eo=D3
+Z2 !s110 1574117463
+!i10b 1
+!s100 Bh]AXIa006efdf2kjhWXO3
+IcAT]<H0KVo72h[kf9:o3[2
+Z3 VDg1SIo80bB@j0V0VzS_@n1
+!s105 csce611_lab_ri_sv_unit
+S1
+R0
+w1574116891
+8C:/Users/Tomahawk/Source/Repos/lab_ri/csce611_lab_ri.sv
+FC:/Users/Tomahawk/Source/Repos/lab_ri/csce611_lab_ri.sv
+L0 6
+Z4 OV;L;10.5b;63
+r1
+!s85 0
+31
+Z5 !s108 1574117463.000000
+!s107 C:/Users/Tomahawk/Source/Repos/lab_ri/csce611_lab_ri.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+C:/Users/Tomahawk/Source/Repos/lab_ri|C:/Users/Tomahawk/Source/Repos/lab_ri/csce611_lab_ri.sv|
+!i113 1
+Z6 o-sv -work work
+Z7 !s92 -sv -work work +incdir+C:/Users/Tomahawk/Source/Repos/lab_ri
+Z8 tCvgOpt 0
+n@c@s@c@e611_lab_ri
+vhexdriver
+R1
+R2
+!i10b 1
+!s100 H[QQ5LV=mWfz`]Kn`VPIR3
+I7mJH]bC2FEz[9VH2]]8Xg1
+R3
+!s105 hexdriver_sv_unit
+S1
+R0
+w1573769106
+8C:/Users/Tomahawk/Source/Repos/lab_ri/hexdriver.sv
+FC:/Users/Tomahawk/Source/Repos/lab_ri/hexdriver.sv
+L0 1
+R4
+r1
+!s85 0
+31
+R5
+!s107 C:/Users/Tomahawk/Source/Repos/lab_ri/hexdriver.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+C:/Users/Tomahawk/Source/Repos/lab_ri|C:/Users/Tomahawk/Source/Repos/lab_ri/hexdriver.sv|
+!i113 1
+R6
+R7
+R8

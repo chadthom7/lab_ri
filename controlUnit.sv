@@ -466,7 +466,7 @@ input logic stall_FETCH //en
 				GPIO_OUT = 1'b0;
 				GPIO_IN = 1'b0;
 			end		
-		end else
+		end else begin
 			alu_op = 4'bXXXX;
 			shamt_EX = 5'bXXXXX;
 			enhilo_EX = 1'bX;

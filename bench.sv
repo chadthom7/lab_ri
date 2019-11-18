@@ -51,7 +51,7 @@ module bench;
 	// CLOCK FOR DOWNLOADING VECTORS
 	always begin
 		//posedge at beginning switches to negedge for #5 to check results
-		clk2 = 1'b1; #65; clk2 = 1'b0; #5; // was #75 #5
+		clk2 = 1'b1; #205; clk2 = 1'b0; #5; // was #75 #5
 	end
 
 	initial begin

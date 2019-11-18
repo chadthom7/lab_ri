@@ -56,6 +56,15 @@ module cpu (
 
 	// Enable hi & lo
 	logic enhilo_EX;
+
+	// Writeback for typical cases (lo_WB)
+	logic [31:0] R_WB_REG;
+	logic [31:0] HI_WB_REG;
+	logic [31:0] LO_WB_REG;
+	logic [31:0] GPIO_IN_REG;
+
+	// Input to write to REG file
+	logic [31:0] regdatain_WB;
 	
 
 		// Load MIPS program // TODO // Create actual .dat file for MIPS code //--------------------------------------//
@@ -86,6 +95,18 @@ module cpu (
 	// lo_WB <= GPIO_in_en == 1'b0 ? lo_EX : gpio_in;  // Not needed
 	// lo_WB and regdatain_WB are synonamous 
 	// I removed regdatain_WB because it was unnecessary 
+
+
+	// 
+	always_ff @(posedge clk, posedge rst) begin
+		if(~enhilo_EX) begin
+			HI_WB_REG <= hi_EX;
+			LO_WB_REG <= lo_EX;
+			R_WB_REG <= lo_EX;
+		end
+		
+	end	
+
 
 
 	always_ff @(posedge clk,posedge rst) begin

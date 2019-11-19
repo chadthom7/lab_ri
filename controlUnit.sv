@@ -219,7 +219,7 @@ input logic stall_FETCH //en
 
 			// SRA 
 			end else if (i_type == 6'd0 && function_code == 6'b000011 &&
-					shamt != 5'd0) begin 
+				shamt != 5'd0) begin 
 				alu_op = 4'b1010;
 				shamt_EX = shamt;
 				enhilo_EX = 1'b0;

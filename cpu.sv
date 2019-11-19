@@ -35,7 +35,7 @@ module cpu (
 	logic [31:0] regdata_WB, r_WB, lo_WB, hi_WB;
 
 	// Regfile signals
-	logic [31:0] readdata2_EX;
+	logic [31:0] readdata1_EX, readdata2_EX;
 
 	// CU signal for ALU , selects between regfile(rt) and signed 
 	// or zero extended immediate for second ALU input
@@ -86,10 +86,12 @@ module cpu (
 	*/
 	assign B_EX = alu_src_EX == 2'b00 ? readdata2_EX : alu_src_EX == 2'b01 ? {{16{instruction_EX[15]}},instruction_EX[15:0]} : {16'd0,instruction_EX[15:0]};
 
+	assign A_EX = readdata1_EX;
+
 	// REG MUX that writes to Regfile
 	// Takes into account GPIO, enhilo_EX, and regsel_EX to determine output
 
-	assign r_WB = lo_EX;
+	// assign r_WB = lo_EX;
 
 	// enhilo writeback registers
 	always_ff @(posedge clk, posedge rst) begin // always @(*) begin
@@ -169,7 +171,7 @@ module cpu (
 						// execute (decode) //maybe RS shouldn't be set here if lui,mflo,mfhi is happening
 						.readaddr1(instruction_EX[25:21]), // RS address
 						.readaddr2(instruction_EX[20:16]), // RT address
-						.readdata1(A_EX),
+						.readdata1(readdata1_EX),
 						.readdata2(readdata2_EX),
 				
 						// writeback

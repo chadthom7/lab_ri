@@ -75,24 +75,6 @@ module cpu (
 
 	end
 
-	// ALU MUX for input B 
-	/* if alu_src == 2'b00:
-		B_EX = readdata2_EX
-	   else if alu_src == 2'b01:
-		{{16{instruction_EX[15]}},instruction_EX[15:0]}
-	   else
-		{16'd0,instruction_EX[15:0]}
-
-	*/
-	assign B_EX = alu_src_EX == 2'b00 ? readdata2_EX : alu_src_EX == 2'b01 ? {{16{instruction_EX[15]}},instruction_EX[15:0]} : {16'd0,instruction_EX[15:0]};
-
-	assign A_EX = readdata1_EX;
-
-	// REG MUX that writes to Regfile
-	// Takes into account GPIO, enhilo_EX, and regsel_EX to determine output
-
-
-	// assign r_WB = lo_EX;
 
 	// enhilo writeback registers
 	always_ff @(posedge clk, posedge rst) begin // always @(*) begin
@@ -149,7 +131,12 @@ module cpu (
 			else if (regsel_WB == 2'b10) regdata_WB <= lo_EX;
 	*/
 
+	// Various MUX's
 	assign regdata_WB = GPIO_in_en == 1'b1 ? gpio_in : regsel_WB == 2'b00 ? lo_EX : regsel_WB == 2'b01 ? hi_EX : lo_EX;
+
+	assign B_EX = alu_src_EX == 2'b00 ? readdata2_EX : alu_src_EX == 2'b01 ? {{16{instruction_EX[15]}},instruction_EX[15:0]} : {16'd0,instruction_EX[15:0]};
+
+	assign A_EX = readdata1_EX;
 	
 	// GPIO_out logic
 	always_ff @(posedge clk, posedge rst) begin

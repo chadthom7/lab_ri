@@ -126,9 +126,9 @@ module cpu (
 		writeaddr_WB <= rdrt_EX == 1'b0 ? instruction_EX[15:11] : instruction_EX[20:16]; 
 			// 0 =rd, 1 = rt
 			if (GPIO_in_en == 1'b1) regdata_WB <= gpio_in;
-			else if (regsel_WB == 2'b00) regdata_WB <= r_WB;
-			else if (regsel_WB == 2'b01) regdata_WB <= hi_WB;
-			else if (regsel_WB == 2'b10) regdata_WB <= lo_WB;
+			else if (regsel_EX == 2'b00) regdata_WB <= r_WB;
+			else if (regsel_EX == 2'b01) regdata_WB <= hi_WB;
+			else if (regsel_EX == 2'b10) regdata_WB <= lo_WB;
 		end
 	end
 	
@@ -149,7 +149,7 @@ module cpu (
 						.readdata2(readdata2_EX),
 				
 						// writeback
-						.we(regwrite_WB),
+						.we(regwrite_EX),
 						.writeaddr(writeaddr_WB),
 						.writedata(regdata_WB));  	
 	// ALU 				EXECUTE

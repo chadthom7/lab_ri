@@ -68,16 +68,7 @@ module cpu (
 		//regwrite_EX = 1'b0;	
 	end
 
-			//---------------------------------EX -> WB
-	// REG MUX that writes to Regfile
-	always_ff @(posedge clk, posedge rst) begin // always @(*) begin
-		r_WB = lo_EX;		
-		if (enhilo_WB == 1'b1) begin
-			lo_WB = lo_EX; 
-			hi_WB = hi_EX; 
-		end
-		enhilo_WB = enhilo_EX;
-	end
+
 
 	
 
@@ -114,7 +105,16 @@ module cpu (
 
 
 	
-	
+				//---------------------------------EX -> WB
+	// REG MUX that writes to Regfile
+	always @(*) begin //always_ff @(posedge clk, posedge rst) begin // always @(*) begin
+		r_WB = lo_EX;		
+		if (enhilo_WB == 1'b1) begin
+			lo_WB = lo_EX; 
+			hi_WB = hi_EX; 
+		end
+		enhilo_WB = enhilo_EX;
+	end
 	// Pipeline Registers or Writeback Stage-------------------
 	always_ff @(posedge clk,posedge rst) begin
 		

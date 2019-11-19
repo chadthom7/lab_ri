@@ -24,7 +24,7 @@ module cpu (
 	logic [31:0] instruction_FETCH, instruction_EX;
 	
 	// ALU signals 
-	logic [31:0] A_EX, B_EX, hi_EX, hi_WB, lo_EX,lo_WB, r_WB;
+	logic [31:0] A_EX, B_EX,regdata_out, hi_EX, hi_WB, lo_EX,lo_WB, r_WB;
 	logic [4:0] shamt_EX;
 	logic zero_EX;
 	logic [3:0] op_EX;
@@ -48,7 +48,7 @@ module cpu (
 
 	// GPIO control from Control Unit
 	logic GPIO_out_en;
-	logic GPIO_in_en;
+	logic GPIO_in_en,GPIO_in_WB;
 	
 	// Control Unit signal 
 	logic [1:0] regsel_EX, regsel_WB;
@@ -65,7 +65,7 @@ module cpu (
 		$readmemh("instmem.dat", instruction_memory); // rename to instmem.dat later
 		pc_src_EX = 2'd0;
 		stall_FETCH = 1'b0;
-		A_EX = 32'd0;
+		//A_EX = 32'd0;
 		
 		//regwrite_EX = 1'b1;
 		//writeaddr_WB = 5'd0;
@@ -131,35 +131,28 @@ module cpu (
 		enhilo_WB = enhilo_EX;
 		//Ex has to wait on FEtch so constantly update writedata_WB
 		//writeaddr_WB <= rdrt_EX == 1'b0 ? instruction_EX[15:11] : instruction_EX[20:16];
+		
 	end
 	// Pipeline Registers or Writeback Stage-------------------
 	always_ff @(posedge clk,posedge rst) begin
+		GPIO_in_WB <= GPIO_in_en;
 		if (rst) begin
-			/*
-			if (iterate == 1'b1) begin			
-				i = 0;
-			end else if(i < 5'd32) begin //&& iterate == 1'b1) begin
-				writeaddr_WB = i;
-				i++;
-			end 
-			//if(iterate = 1'b1)
-			*/
-
-
 			regwrite_EX = 1'b0;
 			regdata_WB = 32'd0;
+			writeaddr_WB = 5'd0;
 		end else begin
 			regwrite_WB = regwrite_EX; //hopefully nonblocking delays this till wB
 			regsel_WB <= regsel_EX;
 		// write addr is one cycle behind execute in the below line
 		writeaddr_WB <= rdrt_EX == 1'b0 ? instruction_EX[15:11] : instruction_EX[20:16]; 
 			// 0 =rd, 1 = rt
-			if (GPIO_in_en == 1'b1) regdata_WB <= gpio_in;
+			if (GPIO_in_en) regdata_WB <= gpio_in;
 			else if (regsel_EX == 2'b00) regdata_WB <= r_WB;
 			else if (regsel_EX == 2'b01) regdata_WB <= hi_WB;
 			else if (regsel_EX == 2'b10) regdata_WB <= lo_WB;
 		end
 	end
+	assign A_EX = GPIO_in_WB == 1'b1 ? gpio_in : regdata_out;	
 	
 	// GPIO_out logic
 	always_ff @(posedge clk, posedge rst) begin
@@ -174,7 +167,7 @@ module cpu (
 		// execute (decode) //maybe RS shouldn't be set here if lui,mflo,mfhi is happening
 						.readaddr1(instruction_EX[25:21]), // RS address
 						.readaddr2(instruction_EX[20:16]), // RT address
-						.readdata1(A_EX),
+						.readdata1(regdata_out),//A_EX),
 						.readdata2(readdata2_EX),
 				
 						// writeback
@@ -182,7 +175,7 @@ module cpu (
 						.writeaddr(writeaddr_WB),
 						.writedata(regdata_WB));  	
 	// ALU 				EXECUTE
-	alu myalu (.a(A_EX),
+	alu myalu (.a(A_EX),//A_EX),
 		   		.b(B_EX), //{16'd0,B_EX[15:0]}),
 		   		.shamt({3'b000,shamt_EX}),//shamt_EX}), //needs to be 8 bits
 		   		.op(op_EX),

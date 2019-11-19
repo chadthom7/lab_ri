@@ -24,8 +24,8 @@ always @(*) begin
 	4'b01_11: {hi,lo} = a*b;
 
 	// shifter operations
-	4'b10_00: lo = b << a; // sll  // changed shamt to a
-	4'b10_01: lo = b >> a; // srl  // changed shamt to a
+	4'b10_00: lo = b << shamt; // sll  // changed shamt to a
+	4'b10_01: lo = b >> shamt; // srl  // changed shamt to a
 	4'b10_1?: lo = $signed(b) >>> shamt; //sra
 
 	// comparison operations

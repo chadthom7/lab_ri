@@ -21,13 +21,13 @@ module cpu (
 	logic [11:0] PC_FETCH;
 	
 	// Current instruction being executed
-	logic [31:0] instruction_EX;
+	logic [31:0] instruction_FETCH, instruction_EX;
 	
 	// ALU signals 
 	logic [31:0] A_EX, B_EX, hi_EX, hi_WB, lo_EX,lo_WB, r_WB;
-	logic [4:0] shamt_EX,shamt_ALU;
+	logic [4:0] shamt_EX;
 	logic zero_EX;
-	logic [3:0] op_EX,op_ALU;
+	logic [3:0] op_EX;
 
 	// Writeback signals
 	logic regwrite_WB, regwrite_EX;
@@ -56,7 +56,9 @@ module cpu (
 
 	// Input to write to REG file
 	logic [31:0] regdatain_WB;
-	
+	always_ff @(posedge clk,posedge rst) begin
+		if (rst) stall_EX <= 1'b0; else stall_EX <= stall_FETCH;
+	end
 	initial begin
 		$readmemh("instmem.dat", instruction_memory); // rename to instmem.dat later
 		pc_src_EX = 2'd0;
@@ -66,7 +68,7 @@ module cpu (
 		//regwrite_EX = 1'b0;	
 	end
 
-
+			//---------------------------------EX -> WB
 	// REG MUX that writes to Regfile
 	always_ff @(posedge clk, posedge rst) begin // always @(*) begin
 		r_WB = lo_EX;		
@@ -77,26 +79,8 @@ module cpu (
 		enhilo_WB = enhilo_EX;
 	end
 
-
-
-	always_ff @(posedge clk,posedge rst) begin
-		if (rst) stall_EX <= 1'b0; else stall_EX <= stall_FETCH;
-
-		//if(stall_EX
-	end
 	
-	//Sign extend
-	always_ff @(posedge clk, posedge rst) begin
-	if (~rst) begin
-		sign_ext = sign_fetch;
-		zero_ext = zero_fetch;
-		shamt_ALU = shamt_EX;
-		op_ALU = op_EX;
-	//Save sign extend from fetch stage to bring to EX stage
-	end
-	end
-	//Set alu input for B
-	assign B_EX = alu_src_EX == 2'b00 ? readdata2_EX : alu_src_EX == 2'b01 ? sign_ext : zero_ext;
+
 	// FETCH stage-------------------------------
 	always_ff @(posedge clk, posedge rst) begin
 		if (rst) begin
@@ -104,11 +88,30 @@ module cpu (
 			instruction_EX <= 32'd0;
 		end else begin	 
 		PC_FETCH <=  pc_src_EX == 2'd0 ? PC_FETCH + 12'd1 : PC_FETCH + instruction_EX[11:0];
-		instruction_EX <= instruction_memory[PC_FETCH]; 
+		instruction_FETCH <= instruction_memory[PC_FETCH]; 
 		end							//^jump/branch
 	end
-	assign sign_fetch = {{16{instruction_EX[15]}},instruction_EX[15:0]};
-	assign zero_fetch = {16'd0,instruction_EX[15:0]};
+	//-------------------FETCH -> EX
+	
+	assign sign_ext = {{16{instruction_EX[15]}},instruction_EX[15:0]};
+	assign zero_ext = {16'd0,instruction_EX[15:0]};
+	assign B_EX = alu_src_EX == 2'b00 ? readdata2_EX : alu_src_EX == 2'b01 ? sign_ext : zero_ext;
+
+
+	//Sign extend
+	always_ff @(posedge clk, posedge rst) begin
+	if (~rst) begin
+		instruction_EX = instruction_FETCH;
+		//sign_ext = sign_fetch; //ext holds the ex stage val of sign
+		//zero_ext = zero_fetch; //ext holds the ex stage val of zero
+		
+		//shamt_ALU = shamt_EX;
+		//op_ALU = op_EX;
+	//Save sign extend from fetch stage to bring to EX stage
+	end
+	end
+	//Set alu input for B
+
 
 	
 	
@@ -152,8 +155,8 @@ module cpu (
 	// ALU 				EXECUTE
 	alu myalu (.a(A_EX),
 		   		.b(B_EX), //{16'd0,B_EX[15:0]}),
-		   		.shamt({3'b000,shamt_ALU}),//shamt_EX}), //needs to be 8 bits
-		   		.op(op_ALU),
+		   		.shamt({3'b000,shamt_EX}),//shamt_EX}), //needs to be 8 bits
+		   		.op(op_EX),
 		   		.hi(hi_EX),
 		   		.lo(lo_EX),
 		   		.zero(zero_EX));

@@ -391,7 +391,7 @@ input logic stall_FETCH //en
 				regwrite_EX = 1'b1; //1 if writing to a reg
 				rdrt_EX = 1'b1; // rt destination
 				memwrite_EX = 1'b1; // only 1 for lui to move bits to the highest 16 bits in dest register
-				alu_src_EX = 2'b00; // default
+				alu_src_EX = 2'b10; // default // set to 2 so that alu uses immediate val
 				GPIO_OUT = 1'b0;
 				GPIO_IN = 1'b0;
 			// addi, addiu

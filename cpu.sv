@@ -62,6 +62,8 @@ module cpu (
 		pc_src_EX = 2'd0;
 		stall_FETCH = 1'b0;
 		A_EX = 32'd0;
+		//regwrite_WB = 1'b0; 	
+		//regwrite_EX = 1'b0;	
 	end
 
 
@@ -116,7 +118,7 @@ module cpu (
 		if (rst) begin
 			regwrite_WB <= 1'b0;
 		end else begin
-			regwrite_WB <= regwrite_EX;
+			regwrite_WB = regwrite_EX; //hopefully nonblocking delays this till wB
 			regsel_WB <= regsel_EX;
 		writeaddr_WB <= rdrt_EX == 1'b0 ? instruction_EX[15:11] : instruction_EX[20:16]; 
 			// 0 =rd, 1 = rt

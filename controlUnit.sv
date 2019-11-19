@@ -63,10 +63,22 @@ input logic stall_FETCH //en
 		// stall_FETCH = 1'b0;
 
 
-		if (~stall_FETCH) begin
+		if (~stall_FETCH && ~rst) begin
 
+			//Empty input  //trying to make sure regwrite_EX/WB = 0 when it should
+			if (i_type == 6'd0 && function_code == 6'd0) begin
+				alu_op = 4'bXXXX;
+				shamt_EX = 5'bXXXXX;
+				enhilo_EX = 1'bX;
+				regsel_EX = 2'bXX; //0 for I-types, unless LW
+				regwrite_EX = 1'b0;
+				rdrt_EX = 1'bX; // rt destination
+				memwrite_EX = 1'bX;
+				alu_src_EX = 2'dX;  // sign extend
+				GPIO_OUT = 1'bX;
+				GPIO_IN = 1'bX;	
 			// ADD
-			if (i_type == 6'd0 && (function_code == 6'b100000 |
+			end else if (i_type == 6'd0 && (function_code == 6'b100000 |
 				function_code == 6'b100001)) begin
 				alu_op = 4'b0100; // op_EX
 				shamt_EX = 5'bXXXXX;
@@ -471,7 +483,7 @@ input logic stall_FETCH //en
 			shamt_EX = 5'bXXXXX;
 			enhilo_EX = 1'bX;
 			regsel_EX = 2'bXX; //0 for I-types, unless LW
-			regwrite_EX = 1'bX;
+			regwrite_EX = 1'b0;
 			rdrt_EX = 1'bX; // rt destination
 			memwrite_EX = 1'bX;
 			alu_src_EX = 2'dX;  // sign extend

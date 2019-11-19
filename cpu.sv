@@ -24,15 +24,15 @@ module cpu (
 	logic [31:0] instruction_EX;
 	
 	// ALU signals 
-	logic [31:0] A_EX, B_EX, hi_EX, lo_EX;
-	logic [4:0] shamt_EX;
+	logic [31:0] A_EX, B_EX, hi_EX, hi_WB, lo_EX,lo_WB, r_WB;
+	logic [4:0] shamt_EX,shamt_ALU;
 	logic zero_EX;
-	logic [3:0] op_EX;
+	logic [3:0] op_EX,op_ALU;
 
 	// Writeback signals
 	logic regwrite_WB, regwrite_EX;
 	logic [4:0] writeaddr_WB;
-	logic [31:0] sign_ext, sign_fetch, zero_ext, zero_fetch , regdata_WB, r_WB,lo_WB, hi_WB;
+	logic [31:0] sign_ext, sign_fetch, zero_ext, zero_fetch , regdata_WB;
 
 	// Regfile signals
 	logic [31:0] readdata2_EX;
@@ -88,6 +88,8 @@ module cpu (
 	if (~rst) begin
 		sign_ext = sign_fetch;
 		zero_ext = zero_fetch;
+		shamt_ALU = shamt_EX;
+		op_ALU = op_EX;
 	//Save sign extend from fetch stage to bring to EX stage
 	end
 	end
@@ -147,16 +149,16 @@ module cpu (
 						.writedata(regdata_WB));  	
 	// ALU 				EXECUTE
 	alu myalu (.a(A_EX),
-		   		.b({16'd0,B_EX[15:0]}),
-		   		.shamt({3'b000,shamt_EX}), //needs to be 8 bits
-		   		.op(op_EX),
+		   		.b(B_EX), //{16'd0,B_EX[15:0]}),
+		   		.shamt({3'b000,shamt_ALU}),//shamt_EX}), //needs to be 8 bits
+		   		.op(op_ALU),
 		   		.hi(hi_EX),
 		   		.lo(lo_EX),
 		   		.zero(zero_EX));
 
 
 	//Execute Stage-------------------	
-	// Control Unit 			DECODE	
+	// Control Unit 			Fetched-> to DECODED	
 	controlUnit CU (		.clk(clk),
 					.rst(rst),
 					.i_type(instruction_EX[31:26]),

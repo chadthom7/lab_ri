@@ -95,11 +95,9 @@ module cpu (
 
 	// enhilo writeback registers
 	always_ff @(posedge clk, posedge rst) begin // always @(*) begin
-		r_WB = lo_EX;		
-		if (enhilo_EX == 1'b1) begin
-			HI_WB_REG <= hi_EX;
-			LO_WB_REG <= lo_EX; 
-		end
+		HI_WB_REG <= hi_EX;
+		LO_WB_REG <= lo_EX; 
+	
 	end
 
 	//assign regdata_WB = GPIO_in_en == 1'b1 ? gpio_in : regsel_WB == 2'b00 ? lo_EX : regsel_WB == 2'b01 ? hi_EX : lo_EX;

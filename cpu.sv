@@ -32,6 +32,8 @@ module cpu (
 	// Writeback signals
 	logic regwrite_WB, regwrite_EX;
 	logic [4:0] writeaddr_WB;
+	//integer i;
+	logic iterate;
 	logic [31:0] sign_ext, sign_fetch, zero_ext, zero_fetch , regdata_WB;
 
 	// Regfile signals
@@ -64,16 +66,26 @@ module cpu (
 		pc_src_EX = 2'd0;
 		stall_FETCH = 1'b0;
 		A_EX = 32'd0;
+		
 		//regwrite_EX = 1'b1;
 		//writeaddr_WB = 5'd0;
 		//regdata_WB = 32'd0;
 		//regwrite_WB = 1'b0; 	
-		//regwrite_EX = 1'b0;	
+		//regwrite_EX = 1'b0;
 	end
 
-
+	
+	
 
 	
+
+
+		
+	/*
+	always_ff @(posedge clk, posedge rst) begin
+		iterate = 1'b1;
+	end
+	*/
 
 	// FETCH stage-------------------------------
 	always_ff @(posedge clk, posedge rst) begin
@@ -122,12 +134,19 @@ module cpu (
 	end
 	// Pipeline Registers or Writeback Stage-------------------
 	always_ff @(posedge clk,posedge rst) begin
-		
 		if (rst) begin
-			//regwrite_WB <= 1'b0;
-			
-			regwrite_EX = 1'b1;
-			writeaddr_WB = 5'd0;
+			/*
+			if (iterate == 1'b1) begin			
+				i = 0;
+			end else if(i < 5'd32) begin //&& iterate == 1'b1) begin
+				writeaddr_WB = i;
+				i++;
+			end 
+			//if(iterate = 1'b1)
+			*/
+
+
+			regwrite_EX = 1'b0;
 			regdata_WB = 32'd0;
 		end else begin
 			regwrite_WB = regwrite_EX; //hopefully nonblocking delays this till wB
@@ -135,7 +154,7 @@ module cpu (
 		// write addr is one cycle behind execute in the below line
 		writeaddr_WB <= rdrt_EX == 1'b0 ? instruction_EX[15:11] : instruction_EX[20:16]; 
 			// 0 =rd, 1 = rt
-			if (GPIO_in_en == 1'b1) regdata_WB = gpio_in;
+			if (GPIO_in_en == 1'b1) regdata_WB <= gpio_in;
 			else if (regsel_EX == 2'b00) regdata_WB <= r_WB;
 			else if (regsel_EX == 2'b01) regdata_WB <= hi_WB;
 			else if (regsel_EX == 2'b10) regdata_WB <= lo_WB;
@@ -196,3 +215,6 @@ module cpu (
 		
 
 endmodule
+
+
+

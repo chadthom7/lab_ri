@@ -21,7 +21,7 @@ module cpu (
 	logic [11:0] PC_FETCH;
 	
 	// Current instruction being executed
-	logic [31:0] instruction_FETCH, instruction_EX;
+	logic [31:0] instruction_FETCH, instruction_EX, regdata_out;
 	
 	// ALU signals 
 	logic [31:0] A_EX, B_EX, hi_EX, hi_WB, lo_EX,lo_WB, r_WB;
@@ -30,7 +30,7 @@ module cpu (
 	logic [3:0] op_EX;
 
 	// Writeback signals
-	logic regwrite_WB, regwrite_EX;
+	logic regwrite_WB, regwrite_EX, GPIO_in_WB;
 	logic [4:0] writeaddr_WB;
 	//integer i;
 	logic iterate;
@@ -65,7 +65,7 @@ module cpu (
 		$readmemh("instmem.dat", instruction_memory); // rename to instmem.dat later
 		pc_src_EX = 2'd0;
 		stall_FETCH = 1'b0;
-		A_EX = 32'd0;
+		//A_EX = 32'd0;
 		
 		//regwrite_EX = 1'b1;
 		//writeaddr_WB = 5'd0;
@@ -108,6 +108,8 @@ module cpu (
 	always_ff @(posedge clk, posedge rst) begin
 	if (~rst) begin
 		instruction_EX = instruction_FETCH;
+		//
+		GPIO_in_WB <= GPIO_in_en;
 		//sign_ext = sign_fetch; //ext holds the ex stage val of sign
 		//zero_ext = zero_fetch; //ext holds the ex stage val of zero
 		
@@ -135,16 +137,7 @@ module cpu (
 	// Pipeline Registers or Writeback Stage-------------------
 	always_ff @(posedge clk,posedge rst) begin
 		if (rst) begin
-			/*
-			if (iterate == 1'b1) begin			
-				i = 0;
-			end else if(i < 5'd32) begin //&& iterate == 1'b1) begin
-				writeaddr_WB = i;
-				i++;
-			end 
-			//if(iterate = 1'b1)
-			*/
-
+	
 
 			regwrite_EX = 1'b0;
 			regdata_WB = 32'd0;
@@ -161,6 +154,9 @@ module cpu (
 		end
 	end
 	
+	//	
+	assign A_EX = GPIO_in_WB == 1'b1 ? gpio_in : regdata_out; // = regdata_out;
+	
 	// GPIO_out logic
 	always_ff @(posedge clk, posedge rst) begin
 		if (rst) gpio_out <= 32'd0; else
@@ -174,7 +170,7 @@ module cpu (
 		// execute (decode) //maybe RS shouldn't be set here if lui,mflo,mfhi is happening
 						.readaddr1(instruction_EX[25:21]), // RS address
 						.readaddr2(instruction_EX[20:16]), // RT address
-						.readdata1(A_EX),
+						.readdata1(regdata_out),//A_EX),
 						.readdata2(readdata2_EX),
 				
 						// writeback

@@ -101,8 +101,16 @@ module cpu (
 	
 	assign sign_ext = {{16{instruction_EX[15]}},instruction_EX[15:0]};
 	assign zero_ext = {16'd0,instruction_EX[15:0]};
-	assign B_EX = alu_src_EX == 2'b00 ? readdata2_EX : alu_src_EX == 2'b01 ? sign_ext : zero_ext;
+	//assign B_EX = alu_src_EX == 2'b00 ? readdata2_EX : alu_src_EX == 2'b01 ? sign_ext : zero_ext;
+	always @(*) begin
+	 
+		if (alu_src_EX == 2'b00)
+			B_EX = readdata2_EX; 
+		else if (alu_src_EX == 2'b01) 
+			B_EX = sign_ext;
+		else B_EX = zero_ext;
 
+	end
 
 	//Sign extend
 	always_ff @(posedge clk, posedge rst) begin

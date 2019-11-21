@@ -21,11 +21,29 @@ module regfile (
 
 	// This creates the 32 x 32 bit register
 	reg [31:0] mem[31:0];
+	/*
+	genvar i;
+	generate
+		for (i=0;i<31;i=i+1) begin : memory_init
+			mem[i] <= 32'd0;
+					//regdata_WB = 32'd0;					
+		end
+	endgenerate
+	*/
+	//integer i;
 	
 	
+
+
 	// At positive edge of clock we write making it synchronous write
 	always @(posedge clk) begin
 	
+	if (rst) begin
+		for (int i=0;i<32;i++) begin
+			mem[i] <= 32'd0;
+		end
+	end
+
 	// Write enable write data at address on Posedge of clk
 	if (we) mem[writeaddr] <= writedata;
 	

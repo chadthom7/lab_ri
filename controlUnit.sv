@@ -316,8 +316,8 @@ input logic stall_FETCH //en
 				GPIO_OUT = 1'b0;
 				GPIO_IN = 1'b0;
 			// NOP
-			/*
-			end else if (i_type == 6'd0 && function_code == 6'b000000) begin 
+			
+			end else if (i_type == 6'd0 && shamt== 5'd0 && function_code == 6'b000000) begin 
 				alu_op = 4'bXXXX;
 				shamt_EX = 5'bXXXXX;
 				enhilo_EX = 1'b0;
@@ -328,7 +328,7 @@ input logic stall_FETCH //en
 				alu_src_EX = 2'd0;
 				GPIO_OUT = 1'b0;
 				GPIO_IN = 1'b0;
-			*/
+			
 			/*
 			10 outputs required for every case:
 				-(4)				

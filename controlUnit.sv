@@ -265,7 +265,7 @@ input logic stall_FETCH //en
 
 			// MFHI 
 			end else if (i_type == 6'd0 && function_code == 6'b010000) begin 
-				alu_op = 4'b1000;
+				alu_op = 4'bXXXX; //shouldn't neep op
 				shamt_EX = 5'bXXXXX;
 				enhilo_EX = 1'b0;
 				regsel_EX = 2'b01;
@@ -278,7 +278,7 @@ input logic stall_FETCH //en
 
 			// MFLO
 			end else if (i_type == 6'd0 && function_code == 6'b010010) begin 
-				alu_op = 4'b1000;
+				alu_op = 4'bXXXX; //shouldn't neep op
 				shamt_EX = 5'bXXXXX;
 				enhilo_EX = 1'b0;
 				regsel_EX = 2'b10;

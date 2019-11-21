@@ -112,7 +112,10 @@ module cpu (
 		GPIO_in_WB <= GPIO_in_en;
 		//sign_ext = sign_fetch; //ext holds the ex stage val of sign
 		//zero_ext = zero_fetch; //ext holds the ex stage val of zero
-		
+		if (enhilo_WB == 1'b1) begin
+			lo_WB = lo_EX; 
+			hi_WB = hi_EX; 
+		end
 		//shamt_ALU = shamt_EX;
 		//op_ALU = op_EX;
 	//Save sign extend from fetch stage to bring to EX stage
@@ -126,10 +129,7 @@ module cpu (
 	// REG MUX that writes to Regfile
 	always @(*) begin //always_ff @(posedge clk, posedge rst) begin // always @(*) begin
 		r_WB = lo_EX;		
-		if (enhilo_WB == 1'b1) begin
-			lo_WB = lo_EX; 
-			hi_WB = hi_EX; 
-		end
+
 		enhilo_WB = enhilo_EX;
 		//Ex has to wait on FEtch so constantly update writedata_WB
 		//writeaddr_WB <= rdrt_EX == 1'b0 ? instruction_EX[15:11] : instruction_EX[20:16];
@@ -174,7 +174,7 @@ module cpu (
 						.readdata2(readdata2_EX),
 				
 						// writeback
-						.we(regwrite_EX),
+						.we(regwrite_WB),
 						.writeaddr(writeaddr_WB),
 						.writedata(regdata_WB));  	
 	// ALU 				EXECUTE

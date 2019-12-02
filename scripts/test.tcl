@@ -5,11 +5,12 @@ echo "TIP: you can run this test again without re-starting modelsim using the co
 echo "do scripts/test.tcl"
 echo ""
 echo "------ Compile Verilog Files --------------------------------------------------"
-vlog -novopt *.sv
+#vlog -novopt *.sv
 echo "------ Load Design ------------------------------------------------------------"
-vsim -novopt work.bench
+#vsim -novopt work.bench
+vsim 
 echo "------ Setup Waves ------------------------------------------------------------"
-add wave -r /bench/*
+#add wave -r bench.sv
 echo "------ Simulate ---------------------------------------------------------------"
 run 5000
 # make sure the transcript window is visible

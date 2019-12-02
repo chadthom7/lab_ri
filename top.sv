@@ -5,10 +5,13 @@ module top (input CLOCK_50,
 	logic [55:0] segs;
 	logic [31:0] GPIO_out;
 
+	/*
 	cpu mycpu(.clk(CLOCK_50),
 		  .rst(~KEY[0]),
 		  .GPIO_in(),
 		  .GPIO_out(GPIO_out));
+
+	*/
 
 	assign {HEX7,HEX6,HEX5,HEX4,HEX3,HEX2,HEX1,HEX0} = segs;
 

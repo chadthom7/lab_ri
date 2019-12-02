@@ -66,6 +66,7 @@ input logic stall_FETCH //en
 		if (~stall_FETCH && ~rst) begin
 
 			//Empty input  //trying to make sure regwrite_EX/WB = 0 when it should
+		/*
 			if (i_type == 6'd0 && function_code == 6'd0) begin
 				alu_op = 4'bXXXX;
 				shamt_EX = 5'bXXXXX;
@@ -77,8 +78,8 @@ input logic stall_FETCH //en
 				alu_src_EX = 2'dX;  // sign extend
 				GPIO_OUT = 1'bX;
 				GPIO_IN = 1'bX;	
-			// ADD
-			end else if (i_type == 6'd0 && (function_code == 6'b100000 |
+		*/	// ADD
+			if (i_type == 6'd0 && (function_code == 6'b100000 |
 				function_code == 6'b100001)) begin
 				alu_op = 4'b0100; // op_EX
 				shamt_EX = 5'bXXXXX;
@@ -184,7 +185,7 @@ input logic stall_FETCH //en
 				GPIO_IN = 1'b0;
 
 			// SLL
-			end else if (i_type == 6'd0 && function_code == 6'b000000) begin 
+			end else if (i_type == 6'd0 && shamt!= 5'd0 && function_code == 6'b000000) begin 
 				alu_op = 4'b1000;
 				shamt_EX = shamt;
 				enhilo_EX = 1'b0;
@@ -265,7 +266,7 @@ input logic stall_FETCH //en
 
 			// MFHI 
 			end else if (i_type == 6'd0 && function_code == 6'b010000) begin 
-				alu_op = 4'b1000;
+				alu_op = 4'bXXXX; //shouldn't neep op
 				shamt_EX = 5'bXXXXX;
 				enhilo_EX = 1'b0;
 				regsel_EX = 2'b01;
@@ -278,7 +279,7 @@ input logic stall_FETCH //en
 
 			// MFLO
 			end else if (i_type == 6'd0 && function_code == 6'b010010) begin 
-				alu_op = 4'b1000;
+				alu_op = 4'bXXXX; //shouldn't neep op
 				shamt_EX = 5'bXXXXX;
 				enhilo_EX = 1'b0;
 				regsel_EX = 2'b10;
@@ -315,7 +316,8 @@ input logic stall_FETCH //en
 				GPIO_OUT = 1'b0;
 				GPIO_IN = 1'b0;
 			// NOP
-			end else if (i_type == 6'd0 && function_code == 6'b000000) begin 
+			
+			end else if (i_type == 6'd0 && shamt== 5'd0 && function_code == 6'b000000) begin 
 				alu_op = 4'bXXXX;
 				shamt_EX = 5'bXXXXX;
 				enhilo_EX = 1'b0;
@@ -326,7 +328,7 @@ input logic stall_FETCH //en
 				alu_src_EX = 2'd0;
 				GPIO_OUT = 1'b0;
 				GPIO_IN = 1'b0;
-
+			
 			/*
 			10 outputs required for every case:
 				-(4)				
